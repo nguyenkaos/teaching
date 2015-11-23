@@ -1,0 +1,470 @@
+% !TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+\documentclass[svgnames]{beamer}
+\setlength{\tabcolsep}{3em}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          titleline=true,
+          alternativetitlepage=true% Use the fancy title page.
+          ]{Torino}
+\usecolortheme{metascale}
+\usepackage{listings}
+
+\ifxetex
+  \usepackage{fontspec}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setsansfont[ItalicFont={GillSansMTPro-BookItalic}]{GillSansMTPro-Book}
+  \setmonofont{Inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\else
+  \usepackage[utf8x]{inputenc}
+  \usepackage[nott]{inconsolata}
+  \newcommand{\codefont}{\fontfamily{fi4}\selectfont}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage[frenchb]{babel}
+\usepackage{pgfplots}
+\usepackage{standalone}
+
+% setup tikz
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+decorations.pathreplacing,decorations.pathmorphing,shapes,%
+matrix,shapes.symbols,plotmarks,decorations.markings,shadows,%
+snakes,backgrounds}
+\def\print#1{\pgfmathparse{#1}\pgfmathresult}
+\def\colx{Blue!40}
+\def\coly{Blue!20}
+\def\colz{white}
+
+\providecommand{\cpp}[1][~]{\textsc{C++}#1}
+
+% vertical align box
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\lstdefinestyle{customcpp}{language=C++,
+        basicstyle=\footnotesize\codefont,
+        tabsize=2,
+        numberstyle=\footnotesize,
+        showstringspaces=false,
+        columns=fullflexible,
+        keywordstyle=\color[rgb]{0.64,0.13,0.11},
+        identifierstyle=,
+        commentstyle=\color[rgb]{0.27,0.27,0.28},
+        stringstyle=\color[rgb]{0.82,0.16,0.14},
+        }
+
+\definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
+
+\title{Programmer en C++}
+\subtitle{Session 1 - Types et Fonctions}
+\author{Joel Falcou \and Guillaume Melquiond}
+\institute{Laboratoire de Recherche en Informatique}
+\date{}
+
+\subject{Computer Science}
+
+\begin{document}
+\include{sourcecode}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\setcounter{framenumber}{0}
+
+%%%%%%%%%%%%%%%%%% INTRO %%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\frame
+{
+  \frametitle{Un peu d'histoire ...}
+  \begin{block}{C++ \`a travers les \^ages}
+  \begin{itemize}
+  \footnotesize
+  \item 1978 Bjarne Stroustrup travaille sur Simula67 qui s'av\'ere peu efficace
+  \item 1980 D\'emarrage du projet \textit{C with Classes}, du C orient\'e objet compil\'e via \texttt{CFront}.
+  \item 1983 \textit{C with Classes} devient \texttt{C++}
+  \item 1985 Parution de \textit{The C++ Programming Language}
+  \item 1998 Premi\`ere standarisation de \texttt{C++} : ISO/IEC 14882:1998
+  \item 2005 Parution du \textit{C++ Technical Report 1} qui deviendra C++0x
+  \item 2011 Ratification de C++0x sous le nom C++11
+  \item 2014 Ratification de C++14
+  \item 2017,2020,... Prochaines \textit{milestones} du langage
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{C++ et C -- Une histoire de famille}
+  \begin{block}{C++ comme h\'eritier du C}
+  \begin{itemize}
+  \item C++ est un sur-ensemble de C
+  \item C++ tente de minimiser les discordances
+  \item Possibilit\'e de conserver une compatibilit\'e binaire
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{C++, ce fils rebel}
+  \begin{itemize}
+  \item C++ \'evolue afin de d\'elaisser les \'el\'ements fondamentaux de C
+  \item Changement drastique du mod\'ele de programmation
+  \item Vers un langage quasi-fonctionnel plus qu'objet et imp\'eratif
+  \end{itemize}
+  \end{block}
+}
+
+%%%%%%%%%%%%%%%%%% TYPES %%%%%%%%%%%%%%%%%%%%
+\section{Rappels}
+\begin{frame}[plain]
+\begin{center}\Huge Rappels\end{center}
+\end{frame}
+
+\frame
+{
+  \frametitle{Types fondamentaux}
+  \begin{block}{Types numériques}
+  \begin{itemize}
+  \footnotesize
+  \item Entiers : \cpptype{(unsigned) char},\cpptype{(unsigned) short},\cpptype{(unsigned) int}
+  \item Entiers portables : \cpptype{std::ptrdiff\_t}, \cpptype{std::uintptr\_t}, \cpptype{std::size\_t}
+  \item Réels IEEE754 : \cpptype{float}, \cpptype{double}
+  \item Booléen : \cpptype{bool} de valeur \cppint{true} ou \cppint{false}
+  \end{itemize}
+
+  \only<1>{\sourcecodecpplines{code/basic/types.cpp}{6}{12}}
+  \only<2>{\sourcecodecpplines{code/basic/types.cpp}{22}{29}}
+  \only<3>{\sourcecodecpplines{code/basic/types.cpp}{40}{44}}
+  \only<4>{\sourcecodecpplines{code/basic/types.cpp}{55}{60}}    
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types fondamentaux}
+  \begin{block}{Qualificateurs de Types}
+  \begin{itemize}
+  \item \cppkeyword{const} : exprime la constance d'une valeur
+  \item \cppkeyword{*} : indique un type \textbf{pointeur}
+  \item \cppkeyword{\&} : indique un type \textbf{référence}
+  \end{itemize}
+
+  \only<1>{\sourcecodecpplines{code/basic/qualificator.cpp}{5}{9}}
+  \only<2>{\sourcecodecpplines{code/basic/qualificator.cpp}{11}{15}}
+  \only<3>{\sourcecodecpp{code/basic/pointer_question.cpp}}
+  \only<4>{\sourcecodecpplines{code/basic/qualificator.cpp}{17}{21}}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types et variables}
+  \begin{block}{Chaîne de caractères}
+  \begin{itemize}
+  \item Représentée par le type standard \cpptype{std::string}
+  \item Accessible via \cpptext{\#include <string>}
+  \item Comparable, copiable, concatenable, redimensionnable
+  \item Compatible avec les chaînes C
+  \end{itemize}  
+
+  \only<1>{\sourcecodecpplines{code/basic/string.cpp}{6}{12}}
+  \only<2>{\sourcecodecpplines{code/basic/string.cpp}{19}{22}}
+  \only<3>{\sourcecodecpplines{code/basic/string.cpp}{26}{27}}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types et variables}
+  \begin{block}{Tableau dynamique}
+  \begin{itemize}
+  \item Représenté par le type standard \cpptype{std::vector<T>}
+  \item Accessible via \cpptext{\#include <vector>}
+  \item Comparable, copiable, redimensionnable
+  \item Optimisé pour gérer tout type de contenu
+  \end{itemize}    
+
+  \sourcecodecpplines{code/basic/vector.cpp}{6}{13}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types et variables}
+  \begin{block}{Tableau statique}
+  \begin{itemize}
+  \item Représenté par le type standard \cpptype{std::array<T,N>}
+  \item Accessible via \cpptext{\#include <array>}
+  \item Propose une sémantique de premier ordre
+  \item Binairement équivalent à \cpptext{T[N]}
+  \end{itemize}    
+
+  \only<1>{\sourcecodecpplines{code/basic/stdarray.cpp}{15}{21}}
+  \only<2>{\sourcecodecpplines{code/basic/stdarray.cpp}{4}{11}}  
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types de données abstraits}
+  \begin{block}{Énumération}
+  \begin{itemize}
+  \footnotesize
+  \item Encapsulation d'un ensemble discret de valeurs partageant une sémantique
+  \item C++ permet le typage des \cppkeyword{enum}
+  \item C++ permet la spécification du support de type
+  \end{itemize}
+  
+  \only<1>{\sourcecodecpplines{code/basic/enum.cpp}{1}{7}}
+  \only<2>{\sourcecodecpplines{code/basic/enum.cpp}{9}{12}}
+  \only<3>{\sourcecodecpplines{code/basic/enum.cpp}{14}{15}}
+  \only<4>{\sourcecodecpplines{code/basic/enum.cpp}{17}{21}}
+  \only<5>{\sourcecodecpplines{code/basic/enum.cpp}{23}{24}}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Types de données abstraits}
+  \begin{block}{Paire et Tuple}
+  \begin{itemize}
+  \item \cpptype{std::pair} : deux membres de types quelconques
+  \item \cpptype{std::tuple} : généralisation de \cpptype{pair}
+  \item Copiable, assignable, intropectable
+  \end{itemize}
+    
+  \only<1>{\sourcecodecpplines{code/basic/tuple.cpp}{7}{9}}
+  \only<2>{\sourcecodecpplines{code/basic/tuple.cpp}{11}{20}}
+  \only<3>{\sourcecodecpplines{code/basic/tuple.cpp}{21}{27}}
+
+  \end{block}{}
+}
+
+%%%%%%%%%%%%%%%%%% FONCTIONS %%%%%%%%%%%%%%%%%%%%
+\section{Aspect Imp\'eratif}
+\begin{frame}[plain]
+\begin{center}\Huge Aspect Imp\'eratif\end{center}
+\end{frame}
+
+\frame
+{
+  \frametitle{Fonctions et surcharge}
+  \begin{block}{Notion de fonction}
+  \begin{itemize}
+  \item Groupe nommé de \cpptext{statements} appelable à volonté
+  \item Élément fondamental de l'encapsulation en C et en C++
+  \item Notion de paramètres et de valeur de retour
+  \end{itemize}
+  \end{block}{}
+
+\only<1>
+{
+  \begin{block}{Déclaration d'une fonction}\footnotesize
+  \begin{center}\footnotesize\cpptext{type name( parameter1, parameter2, ...) \{ statements \}}\end{center}
+  \vspace{-0.5cm}
+  \begin{itemize}\footnotesize
+  \item \cpptext{type} : Type de la valeur retournée par la fonction
+  \item \cpptext{name} : Identifiant de la fonction
+  \item \cpptext{parameter*} : Transfert d'information du point d'appel à la fonction
+  \item \cpptext{statements} : Corps de la fonction, \textit{i.e} le code effectif de la fonction
+  \end{itemize}
+  \end{block}{}
+}
+
+  \only<2>{\sourcecodecpplines{code/basic/functions.cpp}{3}{6}}
+  \only<3>{\sourcecodecpplines{code/basic/functions.cpp}{8}{11}}
+  \only<4>{\sourcecodecpplines{code/basic/functions.cpp}{13}{16}}
+  \only<5>{\sourcecodecpplines{code/basic/functions.cpp}{18}{24}}
+  \only<6>{\sourcecodecpplines{code/basic/functions.cpp}{26}{31}}    
+}
+
+\frame
+{
+  \frametitle{Fonctions et surcharge}
+  \begin{block}{Définition}
+  \begin{itemize}\footnotesize
+  \item Forme de polymorphisme ad-hoc
+  \item En C : une fonction = un symbole
+  \item En \cpp : une fonction = une signature
+  \item Une signature = symbole + type des paramètres + qualificateur
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Exemples:}
+  \begin{itemize}
+  \item \cpptext{double f()}
+  \item \cpptext{double f(int)} - OK
+  \item \cpptext{double f(double,int)} - OK
+  \item \cpptext{double f(...)} - OK
+  \item \cpptext{int f()} - KO
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Fonctions et surcharge}
+  \begin{block}{Fonctions génériques}
+  \begin{itemize}
+  \item Généralisation de la surcharge de fonction
+  \item Généralisation/abstraction des types des paramètres
+  \item Déduction automatique des types
+  \end{itemize}
+  
+  \only<1>{\sourcecodecpplines{code/basic/overload.cpp}{18}{21}}
+  \only<2>{\sourcecodecpplines{code/basic/overload.cpp}{25}{28}}  
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Surcharge des opérateurs}
+  \begin{block}{Objectifs}
+  \begin{itemize}
+  \item Rendre une classe similaire à un type de base
+  \item Renforcer la sémantique et simplifier la syntaxe
+  \item Attention aux abus !
+  \end{itemize}
+  \end{block}{}
+
+  \begin{block}{Syntaxe}
+  \begin{itemize}
+  \item Operateur unaire membre : \cpptext{type type::operator!()}
+  \item Operateur binaire membre : \cpptext{type type::operator+(type)}
+  \item Operateur unaire : \cpptext{type operator-(type)}
+  \item Operateur binaire : \cpptext{type operator+(type,type)}
+  \end{itemize}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Surcharge des opérateurs}
+  \only<1>{\sourcecodecpplines{code/poo/operators.cpp}{1}{16}}
+  \only<2>{\sourcecodecpplines{code/poo/operators.cpp}{18}{22}}  
+}
+
+
+\frame
+{
+  \frametitle{Fonctions et surcharge}
+  \begin{block}{Fonctions génériques}
+  \begin{itemize}
+  \item Généralisation de la surcharge de fonction
+  \item Généralisation/abstraction des types des paramètres
+  \item Déduction automatique des types
+  \end{itemize}
+  
+  \only<1>{\sourcecodecpplines{code/basic/overload.cpp}{18}{21}}
+  \only<2>{\sourcecodecpplines{code/basic/overload.cpp}{25}{28}}  
+  \end{block}{}
+}
+
+\begin{frame}
+\frametitle{Règles de résolution}
+\begin{block}{Processus Général [1]}
+\footnotesize
+\begin{itemize}
+\item Les variantes du symbole sont recherchées pour créer l'\emph{Overload Set} ($\Omega$).
+\item Toute variante n'ayant pas le nombre de paramètres adéquat est éliminée pour obtenir le \emph{Viable Set}.
+\item On recherche dans cet ensemble la \emph{Best Viable Function}.
+\item On vérifie l'accessibilité et l'unicité de la sélection.
+\end{itemize}
+\end{block}
+
+\begin{block}{Que faire de tout ça ?}
+\footnotesize
+\begin{itemize}
+\item Comment définir ($\Omega$) ?
+\item Quels critères pour la \emph{Best Viable Function} ?
+\end{itemize}
+\end{block}
+
+\tiny{[1] \textit{C++ Templates: The Complete Guide} -- David Vandevoorde, Nicolai M. Josuttis}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Règles de résolution}
+\begin{block}{Construction de $\Omega$}
+\begin{itemize}\footnotesize
+\item Ajouter toutes les fonctions non-template avec le bon nom
+\item Ajouter les variantes templates une fois la substitution des paramètres templates est 
+effectuée avec succés
+\item $\Omega$ est un treillis: les fonctions non-templates dominent les fonctions template
+\end{itemize}
+\end{block}
+
+\begin{block}{Sélection de la \emph{Best Viable Function}}
+\begin{itemize}
+\footnotesize
+\item Chaque argument est associé à un Séquence de Conversion Implicite (ICS)
+\item Chaque argument est trié par rapport à son ICS
+\item Si un argument n'est pas triable, le compilateur boude.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Règles de résolution}
+\begin{block}{Les Séquences de Conversion Implicite}
+\begin{itemize}\footnotesize
+\item Conversions standards (SCS)
+\begin{itemize}
+\footnotesize
+\item Correspondance exacte
+\item Promotion
+\item Conversion
+\end{itemize}
+\item Conversion utilisateur (UDCS) , composée comme:
+\begin{itemize}
+\footnotesize
+\item une séquence standard
+\item une conversion définie par l'utilisateur
+\item une deuxiéme séquence standard
+\item Un UDCS est meilleur qu'un autre si sa seconde SCS est meilleure que l'autre
+\end{itemize}
+
+\item Séquence de conversion par ellipse C
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Règles de résolution}
+\only<1>{\sourcecodecpp{code/imperatif/overload1.cpp}}
+\only<2>{\sourcecodecpp{code/imperatif/overload2.cpp}}
+
+\begin{block}{Résultats}
+\only<1>
+{
+\begin{itemize}
+\footnotesize
+\item \cpptext{f(1)} $\rightarrow$ \cpptext{void f(int)}
+\item \cpptext{f(1.)} $\rightarrow$ \cpptext{void f(double)}
+\item \cpptext{f("1")} $\rightarrow$ \cpptext{void f(char const*)}
+\item \cpptext{f(1.f)} $\rightarrow$  \cpptext{void f(double)}
+\item \cpptext{f('1')} $\rightarrow$ \cpptext{void f(int)}
+\end{itemize}
+}
+\only<2>
+{
+\begin{itemize}
+\footnotesize
+\item \cpptext{f(1)} $\rightarrow$ \cpptext{void f(int)}
+\item \cpptext{f(1.)} $\rightarrow$ \cpptext{void f(double)}
+\item \cpptext{f("1")} $\rightarrow$ \cpptext{void f(char const*)}
+\item \cpptext{f(1.f)} $\rightarrow$  \cpptext{void f(T)}
+\item \cpptext{f('1')} $\rightarrow$ \cpptext{void f(T)}
+\end{itemize}
+}
+\end{block}
+\end{frame}
+
+\end{document}
