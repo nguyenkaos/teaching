@@ -43,13 +43,16 @@ int main()
   float  sf = 3.6e-4f;
   double sd = -9e-25;
 
+  float  xf = 0x12.34p10f;
+  double xd = -0x0.01p-30;
+
   std::cout << f << "\n";
   std::cout << sf << "\n";
   std::cout << d << "\n";
   std::cout << sd << "\n";
 
-  std::cout << CHAR_BIT*sizeof(f) << "\n";
-  std::cout << CHAR_BIT*sizeof(d) << "\n";
+  std::cout << 8*sizeof(f) << "\n";
+  std::cout << 8*sizeof(d) << "\n";
 }
 {
   bool t = true;

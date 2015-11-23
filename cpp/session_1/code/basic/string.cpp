@@ -16,13 +16,13 @@ int main()
   std::cout << repeat << "\n";
   std::cout << copy << "\n";
 
-   if(copy == cstyle)
+  if (copy == cstyle)
     std::cout << "s1 et s2 sont identiques\n";
   else
     std::cout << "s1 et s2 sont differentes\n";
 
   std::string x;
 
-  x = repeat + repeat
+  x = repeat + repeat;
   std::cout << x << "\n";
 }

@@ -8,12 +8,12 @@ int main()
   float f = chu.first;
   int   i = chu.second;
 
-  std::tuple<double,int,char> bar = std::make_tuple(3.1, 14, 'y');
+  std::tuple<double,int,char> bar =
+      std::make_tuple(3.1, 14, 'y');
   std::get<2>(bar) = 100;
 
-  int myint;
-  char mychar;
-  std::tie (std::ignore, std::ignore, myint, mychar) = bar;
+  int myint; char mychar;
+  std::tie(std::ignore, myint, mychar) = bar;
 
   std::cout << "myint : " << myint << "\n";
   std::cout << "mychar: " << mychar << "\n";
