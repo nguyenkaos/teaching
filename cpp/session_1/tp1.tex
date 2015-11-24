@@ -1,0 +1,81 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[french]{babel}
+\usepackage{listings}
+\usepackage{parskip}
+
+\lstset{language=C++,basicstyle=\small\tt}
+
+\title{\vspace{-2cm}Programmation C++ Avancée}
+\author{Joel Falcou \and Guillaume Melquiond}
+\date{24 novembre 2015}
+
+\begin{document}
+\maketitle
+
+Il sera important de réfléchir à la signature des fonctions à définir. En
+particulier, ces signatures devront éviter que des arguments soient
+copiés inutilement.
+
+Pour forcer le compilateur à utiliser une version moderne du langage C++,
+passez lui l'option \lstinline|--std=c++11| ou l'option
+\lstinline|--std=c++14|. Utilisez l'option \lstinline|-Wall| pour activer
+tous les diagnostics.
+
+\section{Points}
+
+Définissez un type représentant les points à deux coordonnées flottantes.
+
+Écrivez une fonction qui produit un point avec des coordonnées choisies
+au hasard. Note : la fonction \lstinline|random| est déclarée dans
+\lstinline|<cstdlib>|.
+
+Écrivez une fonction qui affiche les coordonnées d'un point sur la sortie
+standard. Note : les objets et opérateurs
+``\lstinline|std::cout << ... << '\n'|'' sont déclarés dans
+\lstinline|<iostream>|.
+
+\section{Vecteurs de points}
+
+Le type générique \lstinline|std::vector<T>| fournit des tableaux
+dynamiques. Voici quelques opérations supportées :
+\begin{itemize}
+\item \lstinline|t[i]| permet d'accéder à la case $i$ du tableau $t$;
+\item \lstinline|t.size()| renvoie la taille courante du tableau $t$;
+\item \lstinline|t.push_back(v)| ajoute une case à la fin du tableau $t$
+  et la remplit en utilisant $v$ de type $T$.
+\end{itemize}
+
+\smallskip
+
+Écrivez une fonction qui prend un entier $n$ et renvoie un tableau
+contenant $n$ points tirés au hasard.
+
+Écrivez une fonction qui affiche le contenu d'un tableau de points.
+
+Remarque : la syntaxe ``\lstinline|for (auto v : t) { ... }|'' itère sur les
+cases d'un tableau $t$ et assigne successivement à $v$ les valeurs des
+cases.
+
+\section{Point le plus proche}
+
+Écrivez une fonction qui calcule la distance entre deux points. Note :
+\lstinline|sqrt| est déclarée dans \lstinline|<cmath>|.
+
+Écrivez une fonction qui, étant donnée un point $p$ et un tableau $t$ de
+points, renvoie l'indice dans $t$ du point le plus proche de
+$p$.
+
+Utilisez les fonctions définies précédemment pour tester votre code sur
+de petits exemples.
+
+\section{Barycentre de points pondérés}
+
+Définissez un type des points pondérés (point muni d'un poids
+flottant). Écrivez une fonction qui, étant donnée un tableau de points
+pondérés, renvoie le point barycentre de ces points pondérés. Écrivez
+les fonctions nécessaires pour tester votre calcul de barycentre.
+
+\end{document}
