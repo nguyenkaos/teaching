@@ -1,0 +1,392 @@
+% !TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+\documentclass[svgnames]{beamer}
+\setlength{\tabcolsep}{3em}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          titleline=true,
+          alternativetitlepage=true% Use the fancy title page.
+          ]{Torino}
+\usecolortheme{metascale}
+\usepackage{listings}
+
+\ifxetex
+  \usepackage{fontspec}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setsansfont[ItalicFont={GillSansMTPro-BookItalic}]{GillSansMTPro-Book}
+  \setmonofont{Inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\else
+  \usepackage[utf8x]{inputenc}
+  %\usepackage[nott]{inconsolata}
+  %\newcommand{\codefont}{\fontfamily{fi4}\selectfont}
+  \usepackage{inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{colortbl}
+\usepackage[frenchb]{babel}
+%\usepackage{pgfplots}
+%\usepackage{standalone}
+\usepackage{relsize}
+
+% setup tikz
+%% \usepackage{tikz}
+%% \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+%% decorations.pathreplacing,decorations.pathmorphing,shapes,%
+%% matrix,shapes.symbols,plotmarks,decorations.markings,shadows,%
+%% snakes,backgrounds}
+\def\print#1{\pgfmathparse{#1}\pgfmathresult}
+\def\colx{Blue!40}
+\def\coly{Blue!20}
+\def\colz{white}
+
+\def\C++{\textup{C}\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+
+% vertical align box
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\lstdefinestyle{customcpp}{language=C++,
+        basicstyle=\footnotesize\codefont,
+        tabsize=2,
+        numberstyle=\footnotesize,
+        showstringspaces=false,
+        %columns=fullflexible,
+        keywordstyle=\color[rgb]{0.64,0.13,0.11},
+        identifierstyle=,
+        commentstyle=\color[rgb]{0.27,0.27,0.28},
+        stringstyle=\color[rgb]{0.82,0.16,0.14},
+        }
+
+\definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
+
+\NoAutoSpaceBeforeFDP
+
+\title{Programmation C++ Avancée}
+\subtitle{Session 2 -- Objets : Modèle et Cycle de vie}
+\author{Joel Falcou \and Guillaume Melquiond}
+\institute{Laboratoire de Recherche en Informatique}
+\date{}
+
+\subject{Computer Science}
+
+\begin{document}
+\include{sourcecode}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\setcounter{framenumber}{0}
+
+%%%%%%%%%%%%%%%%%% RAPPEL THEORIQUE %%%%%%%%%%%%%%%%%%%%
+\section{Qu'est-ce qu'un objet ?}
+
+\frame
+{
+  \frametitle{Service, Interface, Contrat ?}
+  \begin{block}{Un objet - vision logique}
+  \begin{itemize}
+  \item Un objet encapsule un état
+  \item Un objet propose un service
+  \item Un objet définit une interface
+  \end{itemize}
+  \end{block}{}
+  
+  \begin{block}{Un objet - vision physique}
+  \begin{itemize}
+  \item un état = données membres
+  \item un comportement = fonctions membres
+  \item le tout définit dans une \cpptext{classe}
+  \end{itemize}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Syntaxe de base}
+  \sourcecodecpp{code/poo/basic.cpp}  
+}
+ 
+\frame
+{
+  \frametitle{Héritage public}
+  \begin{block}{Définition}
+  \begin{itemize}
+  \footnotesize
+  \item Une classe hérite d'une autre afin de spécialiser son comportement
+  \item La classe ``fille'' accéde aux données et à l'interface publique de sa ``mére''
+  \item Notion de sous-classe
+  \end{itemize}
+
+  \only<1>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{1}{5}}
+  \only<2>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{7}{12}}
+  \only<3>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{14}{17}}
+  \only<4>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{19}{27}}
+
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Gestion du polymorphisme}
+  \sourcecodecpp{code/poo/virtual.cpp}  
+}
+
+\frame
+{
+  \frametitle{Gestion du polymorphisme}
+  \sourcecodecpp{code/poo/virtualspec.cpp}  
+}
+
+\frame
+{
+  \frametitle{Principe de substitution de Liskov}
+  \begin{block}{\'Enonc\'e}
+  Partout o\`u un objet \texttt{x} de type \texttt{T} est attendu, on doit pouvoir passer 
+  un objet \texttt{y} type \texttt{U} , avec \texttt{U}  héritant de \texttt{T} .
+  \end{block}
+
+  \begin{block}{Traduction}
+  \begin{itemize}
+  \item une classe = une interface = un \textbf{contrat}
+  \item Les pr\'e-conditions ne peuvent \^etre qu'affaiblies
+  \item Les post-conditions ne peuvent \^etre que renforcées
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Principe de substitution de Liskov}
+  \only<1>{\sourcecodecpplines{code/poo/liskov.cpp}{3}{14}}
+  \only<2>{\sourcecodecpplines{code/poo/liskov.cpp}{16}{30}}
+  \only<3>{\sourcecodecpplines{code/poo/liskov.cpp}{32}{49}}
+}
+
+\frame
+{
+  \frametitle{Héritage privé}
+  \begin{block}{Définition}
+  \begin{itemize}
+  \item Résout le problème de la factorisation de code
+  \item Permet la réutilisation des composants logiciels
+  \item Pas de relation de sous-classe
+  \end{itemize}
+
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Héritage privé}
+  \sourcecodecpp{code/poo/stack.cpp}
+}
+
+\frame
+{
+  \frametitle{Sémantique de Valeur }
+  \begin{block}{Définition}
+  Une classe possède une sémantique de valeur ssi deux instances de
+  cette classe situées à des adresses différentes, mais au contenu
+   identique, sont considérées égales.
+  \end{block}
+
+  \begin{block}{Structure classique}
+  \begin{itemize}
+  \footnotesize
+  \item Peut redéfinir des opérateurs (+,-,*,...)
+  \item Posséde un opérateur d'affectation
+  \item Est comparable via < et ==
+  \item Ne peut être utilisé comme classe de base
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+ \frametitle{Sémantique d'Entité }
+  \begin{block}{Définition}
+Une classe a une sémantique d'entité si toutes les instances de
+cette classe sont nécessairement deux à deux distinctes, même si
+tous les champs de ces instances sont égaux. Elle modélise un concept d'identité : chaque objet représente un
+individu unique.
+  \end{block}
+
+  \begin{block}{Structure classique}
+  \begin{itemize}
+  \footnotesize
+  \item Ne redéfinit pas d'opérateur
+  \item Ne posséde pas d'opérateur d'affectation
+  \item N'est pas comparable via < et ==
+  \item Les copies sont explicites via un fonction adéquat (clone)
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+ \frametitle{Que faire ?}
+  \begin{block}{Utilisez préférentiellement la sémantique de valeur}
+  \begin{itemize}
+  \footnotesize
+  \item Code clair et concis
+  \item Bonne performance car pas d'allocation dynamique supplémentaire
+  \item NRVO et élision de copie sont de la partie
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Ne délaissez pas les entités}
+  \begin{itemize}
+  \footnotesize
+  \item Extrêmement utile pour le data-driven code
+  \item Bonne base pour des bibliothèques d'infrastructure
+  \item Se marie élégamment avec les pointeurs à sémantique riche
+  \end{itemize}
+  \end{block}
+}
+
+\section{Cycle de vie en C++}
+\frame
+{
+  \frametitle{Où ranger les objets ?}
+  \begin{block}{La pile}
+  \begin{itemize}
+  \item Emplacement mémoire rapide mais limité
+  \item Nettoyer automatiquement en fin de bloc
+  \item Simple et efficace
+  \end{itemize}
+  \end{block}
+
+
+  \begin{block}{Le Tas}
+  \begin{itemize}
+  \item Espace virtuellement illimité
+  \item Accessible via \cppkeyword{new} et \cppkeyword{delete}
+  \item Nécessite une gestion fine
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Principe de RAII}
+  \begin{block}{Objectifs}
+  \begin{itemize}\footnotesize
+  \item Assurer la sureté de la gestion des ressources
+  \item Minimiser la gestion manuelle de la mémoire
+  \item Simplifier la gestion des exceptions
+  \item Assure une sémantique de valeur
+  \end{itemize}
+  \end{block}
+  
+  \begin{center}
+  \textbf{R}esource \textbf{A}cquisition \textbf{I}s \textbf{I}nitialisation
+  \end{center}
+
+  \begin{block}{Mise en \oe{uvre}}
+  \begin{itemize}\footnotesize
+  \item Constructeurs = prise de ressource
+  \item Destructeur = libération de ressource
+  \item Gestion de la ressource au niveau du bloc
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Gestion des Temporaires}
+  \begin{block}{\textit{lvalue} vs \textit{rvalue}}
+  \begin{itemize}
+  \item lvalue : objet avec une identit\'e, un nom
+  \item rvalue : objet sans identit\'e
+  \item La durée de vie d'une rvalue est en général bornée au \texttt{statement}
+  \item Une rvalue peut survivre dans une référence vers une lvalue constante
+  \end{itemize}
+  \end{block}
+
+  \sourcecodecpp{code/raii/lrvalues.cpp}
+}
+
+\frame
+{
+  \frametitle{R\'ef\'erence vers rvalue}
+  \begin{block}{Objectifs}
+  \begin{itemize}
+  \item Discriminer via un qualificateur lvalue et rvalue
+  \item Expliciter les opportunit\'es d'optimisation
+  \item Simplifier la d\'efinition d'interfaces
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Notation}
+  \begin{itemize}
+  \item \texttt{T\&} : référence vers lvalue
+  \item \texttt{T const\&} : référence vers lvalue constante
+  \item \texttt{T\&\&} : référence vers rvalue
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{R\'ef\'erence vers rvalue}
+  \only<1>
+  {
+    \begin{block}{Exemple}
+    \sourcecodecpp{code/raii/rvalueref.cpp}
+    \end{block}
+  }
+  
+  \only<2>
+  {
+    \begin{block}{Le problème du \texttt{forwarding}}
+     \sourcecodecpp{code/raii/forward01.cpp}
+    \end{block}
+  }
+  
+  \only<3>
+  {
+    \begin{block}{Le problème du \texttt{forwarding}}
+     \sourcecodecpp{code/raii/forward02.cpp}
+    \end{block}
+  }
+}
+
+\frame
+{
+  \frametitle{Sémantique de transfert}
+  \begin{block}{Problèmatique}
+  \begin{itemize}
+  \footnotesize
+  \item Copier un objet contenant des ressources est coûteux
+  \item Copier depuis un temporaire est doublement coûteux (allocation+deallocation)
+  \item Limite l'expressivité de certaines interfaces
+  \item Pourquoi ne pas recycler le temporaire ?
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Solution}
+  \begin{itemize}
+  \item Utiliser les rvalue-reference pour détecter un temporaire
+  \item Extraire son contenu et le \alert{transf\'erer} dans un objet pérenne
+  \item Stratégie généralisée à tout le langage et \`a la biblioth\`eque standard
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Sémantique de transfert}
+  
+  \only<1>{\sourcecodecpplines{code/raii/sort01.cpp}{1}{8}}
+  \only<2>{\sourcecodecpplines{code/raii/sort01.cpp}{10}{14}}
+  \only<3>{\sourcecodecpplines{code/raii/sort01.cpp}{16}{23}}
+  \only<4>{\sourcecodecpplines{code/raii/sort01.cpp}{25}{29}}
+}
+
+\end{document}
