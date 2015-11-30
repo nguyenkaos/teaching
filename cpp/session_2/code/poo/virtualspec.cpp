@@ -1,7 +1,7 @@
 class base
 {
   public:
-  virtual void behavior() override;
+  virtual void behavior();
   virtual void foo() final {}
 };
 

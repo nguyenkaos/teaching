@@ -101,7 +101,7 @@
   \begin{itemize}
   \item un état = données membres
   \item un comportement = fonctions membres
-  \item le tout définit dans une \cpptext{classe}
+  \item le tout définit dans une \cpptext{class}
   \end{itemize}
   \end{block}{}
 }
@@ -119,16 +119,17 @@
   \begin{itemize}
   \footnotesize
   \item Une classe hérite d'une autre afin de spécialiser son comportement
-  \item La classe ``fille'' accéde aux données et à l'interface publique de sa ``mére''
+  \item La classe ``fille'' accède aux données et à l'interface publique de sa ``mère''
   \item Notion de sous-classe
   \end{itemize}
 
+  \begin{overlayarea}{\textwidth}{4cm}
   \only<1>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{1}{5}}
   \only<2>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{7}{12}}
   \only<3>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{14}{17}}
   \only<4>{\sourcecodecpplines{code/poo/publicinheritance.cpp}{19}{27}}
-
-  \end{block}{}
+  \end{overlayarea}
+  \end{block}
 }
 
 \frame
@@ -148,7 +149,7 @@
   \frametitle{Principe de substitution de Liskov}
   \begin{block}{\'Enonc\'e}
   Partout o\`u un objet \texttt{x} de type \texttt{T} est attendu, on doit pouvoir passer 
-  un objet \texttt{y} type \texttt{U} , avec \texttt{U}  héritant de \texttt{T} .
+  un objet \texttt{y} de type \texttt{U}, avec \texttt{U}  héritant de \texttt{T} .
   \end{block}
 
   \begin{block}{Traduction}
@@ -199,9 +200,9 @@
   \begin{block}{Structure classique}
   \begin{itemize}
   \footnotesize
-  \item Peut redéfinir des opérateurs (+,-,*,...)
-  \item Posséde un opérateur d'affectation
-  \item Est comparable via < et ==
+  \item Peut redéfinir des opérateurs ($+$, $-$, $*$, ...)
+  \item Possède un opérateur d'affectation
+  \item Est comparable via $<$ et $==$
   \item Ne peut être utilisé comme classe de base
   \end{itemize}
   \end{block}
@@ -221,9 +222,9 @@ individu unique.
   \begin{itemize}
   \footnotesize
   \item Ne redéfinit pas d'opérateur
-  \item Ne posséde pas d'opérateur d'affectation
-  \item N'est pas comparable via < et ==
-  \item Les copies sont explicites via un fonction adéquat (clone)
+  \item Ne possède pas d'opérateur d'affectation
+  \item N'est pas comparable via $<$ et $==$
+  \item Les copies sont explicites via une fonction adéquate (clone)
   \end{itemize}
   \end{block}
 }
@@ -240,7 +241,7 @@ individu unique.
   \end{itemize}
   \end{block}
 
-  \begin{block}{Ne délaissez pas les entités}
+  \begin{block}{Ne délaissez pas la sémantique d'entité}
   \begin{itemize}
   \footnotesize
   \item Extrêmement utile pour le data-driven code
@@ -257,13 +258,13 @@ individu unique.
   \begin{block}{La pile}
   \begin{itemize}
   \item Emplacement mémoire rapide mais limité
-  \item Nettoyer automatiquement en fin de bloc
+  \item Nettoyage automatique en fin de bloc
   \item Simple et efficace
   \end{itemize}
   \end{block}
 
 
-  \begin{block}{Le Tas}
+  \begin{block}{Le tas}
   \begin{itemize}
   \item Espace virtuellement illimité
   \item Accessible via \cppkeyword{new} et \cppkeyword{delete}
@@ -277,7 +278,7 @@ individu unique.
   \frametitle{Principe de RAII}
   \begin{block}{Objectifs}
   \begin{itemize}\footnotesize
-  \item Assurer la sureté de la gestion des ressources
+  \item Assurer la sûreté de la gestion des ressources
   \item Minimiser la gestion manuelle de la mémoire
   \item Simplifier la gestion des exceptions
   \item Assure une sémantique de valeur
@@ -360,7 +361,7 @@ individu unique.
 \frame
 {
   \frametitle{Sémantique de transfert}
-  \begin{block}{Problèmatique}
+  \begin{block}{Problématique}
   \begin{itemize}
   \footnotesize
   \item Copier un objet contenant des ressources est coûteux
@@ -372,7 +373,7 @@ individu unique.
 
   \begin{block}{Solution}
   \begin{itemize}
-  \item Utiliser les rvalue-reference pour détecter un temporaire
+  \item Utiliser les rvalue-references pour détecter un temporaire
   \item Extraire son contenu et le \alert{transf\'erer} dans un objet pérenne
   \item Stratégie généralisée à tout le langage et \`a la biblioth\`eque standard
   \end{itemize}
