@@ -1,0 +1,89 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[french]{babel}
+\usepackage{listings}
+\usepackage{parskip}
+
+\lstset{language=C++,basicstyle=\small\tt,showstringspaces=false}
+
+\title{\vspace{-2cm}Programmation C++ Avancée}
+\author{Joel Falcou \and Guillaume Melquiond}
+\date{1 décembre 2015}
+
+\begin{document}
+\maketitle
+
+\section{Copies et élisions}
+
+\section{Accès à des fichiers}
+
+Le but est ici de fournir une encapsulation en C++ des fonctions C
+d'accès aux fichiers : \lstinline|fopen|, \lstinline|fwrite|,
+\lstinline|fclose|, disponibles dans \lstinline|<cstdio>|. On pourra lire
+les pages de manuel de ces fonctions pour leur description, par exemple
+\lstinline|man fopen| en ligne de commande.
+
+Créez une classe C++ \lstinline|file| avec un champ de type
+\lstinline|FILE *|. Définissez un constructeur prenant une chaîne de
+caractères et ouvrant le fichier correspondant.
+
+Définissez une méthode \lstinline|file::write| prenant une chaîne de
+caractère an argument et l'écrivant dans le fichier ouvert
+précédemment. Note : la méthode \lstinline|std::string::c_str| permet
+d'accéder à la chaîne C qu'attend \lstinline|fwrite|.
+
+Testez votre classe sur un exemple du genre suivant. Vérifiez que les
+fichiers ainsi créés contiennent bien les chaînes attendues.
+\begin{lstlisting}
+int main() {
+  file f("test1.txt");
+  f.write("first string for test1\n");
+  file g("test2.txt");
+  g.write("first string for test2\n");
+  f.write("second string for test1\n");
+  return 0;
+}
+\end{lstlisting}
+
+Définissez un destructeur \lstinline|file::~file| qui ferme proprement le
+fichier ouvert par le constructeur.
+
+Question : quel est le comportement du constructeur de copie créé par
+défaut par le compilateur pour la classe \lstinline|file| ? Quel est le
+problème avec ce comportement ?
+
+Écrivez un programme qui plante violemment à l'exécution suite à une copie.
+
+Appliquez l'attribut \lstinline|= delete| au constructeur de copie de la
+classe \lstinline|file| pour le désactiver. Vérifiez que le compilateur
+rejette maintenant votre programme incorrect.
+
+Constatez que le même problème existe avec l'opérateur d'assignation
+\lstinline|file::operator=|. Corrigez le de la même manière que pour le
+constructeur de copie.
+
+\section{Sémantique de transfert}
+
+La classe \lstinline|file| précédente ne permet ni construction par copie
+ni assignation par copie. Par contre, une sémantique de transfert serait
+possible.
+
+Ajoutez un constructeur par transfert \lstinline|file::file(file &&)|.
+Testez le sur le code suivant. Note : il doit être modifié avant de
+pouvoir compiler.
+\begin{lstlisting}
+int main() {
+  file f("test3.txt");
+  f.write("first string for test3\n");
+  file g = f;
+  g.write("second string for test3\n");
+  return 0;
+}
+\end{lstlisting}
+
+Question : avez-vous été obligé de modifier le code du destructeur
+\lstinline|file::~file| ? Pourquoi ?
+
+\end{document}
