@@ -15,7 +15,40 @@
 \begin{document}
 \maketitle
 
-\section{Copies et élisions}
+\section{Création, destruction, copie et élision}
+
+Créez une classe \lstinline|T| possédant un constructeur sans argument,
+un constructeur de copie, un opérateur d'assignation par copie et un
+destructeur. Pour chacun de ces quatre membres, ajoutez une ligne de code
+qui affiche sur la sortie standard qu'il a été appelé. On pourra utiliser
+le pointeur \lstinline|this| pour éliminer toute ambiguïté en présence de
+plusieurs objets :
+\begin{lstlisting}
+T(T const &t) { std::cout << this << ": constructed from " << &t << '\n'; }
+\end{lstlisting}
+
+Testez votre code sur différents scénarios :
+\begin{lstlisting}
+void f1(T const &t) {}
+void f2(T t) {}
+T f3() { return T(); }
+T f4() { T t; return t; }
+void f5(T &t) { t = T(); }
+
+int main() {
+  T a;
+  f1(a);
+  f2(a);
+  T b = a;
+  T c = f3();
+  T d = f4();
+  f5(d);
+}
+\end{lstlisting}
+
+Expliquez dans chacun des cas quand l'objet est construit, détruit,
+copié, etc. Soyez particulièrement attentif aux cas où le compilateur a
+élidé une ou plusieurs copies.
 
 \section{Accès à des fichiers}
 
@@ -67,11 +100,14 @@ constructeur de copie.
 \section{Sémantique de transfert}
 
 La classe \lstinline|file| précédente ne permet ni construction par copie
-ni assignation par copie. Par contre, une sémantique de transfert serait
+ni assignation par copie. Par contre, une sémantique de transfert est
 possible.
 
+Expliquez en quoi consiste un transfert entre deux objets de la classe
+\lstinline|file|. Cela nécessite-t-il de modifier le code du destructeur ?
+
 Ajoutez un constructeur par transfert \lstinline|file::file(file &&)|.
-Testez le sur le code suivant. Note : il doit être modifié avant de
+Testez le sur le code suivant. Note : le code doit être modifié avant de
 pouvoir compiler.
 \begin{lstlisting}
 int main() {
@@ -83,7 +119,6 @@ int main() {
 }
 \end{lstlisting}
 
-Question : avez-vous été obligé de modifier le code du destructeur
-\lstinline|file::~file| ? Pourquoi ?
+Question : est-il possible d'écrire un code incorrect ?
 
 \end{document}
