@@ -93,7 +93,7 @@
   \begin{itemize}
   \item Un objet encapsule un état
   \item Un objet propose un service
-  \item Un objet définit une interface
+  \item Un objet satisfait à une interface
   \end{itemize}
   \end{block}{}
   
@@ -213,9 +213,8 @@
  \frametitle{Sémantique d'Entité }
   \begin{block}{Définition}
 Une classe a une sémantique d'entité si toutes les instances de
-cette classe sont nécessairement deux à deux distinctes, même si
-tous les champs de ces instances sont égaux. Elle modélise un concept d'identité : chaque objet représente un
-individu unique.
+cette classe sont nécessairement deux à deux distinctes. Elle modélise 
+un concept d'identité : chaque objet représente un individu unique.
   \end{block}
 
   \begin{block}{Structure classique}
@@ -257,7 +256,7 @@ individu unique.
   \frametitle{Où ranger les objets ?}
   \begin{block}{La pile}
   \begin{itemize}
-  \item Emplacement mémoire rapide mais limité
+  \item Mémoire rapide mais limité en espace et en temps
   \item Nettoyage automatique en fin de bloc
   \item Simple et efficace
   \end{itemize}
