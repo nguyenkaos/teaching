@@ -7,10 +7,10 @@ class simple_class
   std::string         name;
 
   public:
-  MyLittleClass();
-  MyLittleClass(MyLittleClass const& other); 
-  ~MyLittleClass();
-  
-  MyLittleClass& operator=(MyLittleClass const& other);
+  simple_class();
+  simple_class(simple_class const& other);
+  ~simple_class();
+
+  simple_class& operator=(simple_class const& other);
   int update(double n);
 };
