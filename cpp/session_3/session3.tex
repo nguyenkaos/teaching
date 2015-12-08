@@ -148,7 +148,7 @@
 
 \frame
 {
-  \frametitle{Copie, Transfert, etc ...}
+  \frametitle{Copie, transfert, etc ...}
   \begin{block}{Règles d'apparition des membres spéciaux}
   \begin{itemize}
   \item  Si un constructeur non-trivial est déclaré, le constructeur par défaut n'est pas généré
@@ -215,16 +215,16 @@
 
   \begin{block}{Outils à disposition}
   \begin{itemize}
-  \item Sémantique de propriété : \texttt{unique\_ptr}
-  \item Sémantique de partage : \texttt{shared\_ptr} 
-  \item Sémantique de partage faible : \texttt{weak\_ptr}
+  \item Sémantique de propriété : \texttt{std::unique\_ptr}
+  \item Sémantique de partage : \texttt{std::shared\_ptr}
+  \item Sémantique de partage faible : \texttt{std::weak\_ptr}
   \end{itemize}
   \end{block}{}
 }
 
 \frame
 {
-  \frametitle{\texttt{unique\_ptr}}
+  \frametitle{\texttt{std::unique\_ptr}}
   \only<1>{
     \begin{block}{Principes}
   \begin{itemize}
@@ -243,18 +243,20 @@
 
 \frame
 {
-  \frametitle{\texttt{shared\_ptr}}
+  \frametitle{\texttt{std::shared\_ptr}}
   \only<1>{
   \begin{block}{Principes}
   \begin{itemize}
   \item Pointeur à compteur de références
   \item Libère la mémoire lorsque aucune référence ne pointe sur lui
-  \item Cycles gérés par \texttt{weak\_ptr}
+  \item Cycles gérés par \texttt{std::weak\_ptr}
+  \item Conversion de \texttt{this} avec \texttt{std::enable\_shared\_from\_this}
   \end{itemize}
   \end{block}
   }
   \only<2>{\sourcecodecpp{code/raii/shared_ptr.cpp}}
   \only<3>{\sourcecodecpp{code/raii/weak_ptr.cpp}}
+  \only<4>{\sourcecodecpp{code/raii/shared_from_this.cpp}}
 }
 
 \end{document}
