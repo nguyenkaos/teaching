@@ -115,21 +115,21 @@
   \begin{block}{Conséquences}
   \begin{itemize}
   \item Certains membres deviennent spéciaux
-  \item allouer implique libérer
-  \item Couplage entre déstructeur et constructeurs
+  \item Allouer implique libérer
+  \item Couplage entre destructeur et constructeurs
   \end{itemize}
   \end{block}
 
   \begin{block}{La Règle des Trois}
   Une classe se doit de disposer d'un constructeur par défaut, de copie,
-  d'un destructeur et d'un opérateur d'affection dés que l'un de ces membres 
-  a une déinition non triviale.
+  d'un destructeur et d'un opérateur d'affection dès que l'un de ces membres
+  a une définition non triviale.
   \end{block}
 }
 
 \frame
 {
-  \frametitle{La régle des 3 en action}
+  \frametitle{La règle des 3 en action}
   \only<1>{\sourcecodecpplines{code/rule3.cpp}{1}{15}}
   \only<2>{\sourcecodecpplines{code/rule3.cpp}{16}{28}}  
 }
@@ -149,19 +149,20 @@
 \frame
 {
   \frametitle{Copie, Transfert, etc ...}
-  \begin{block}{Régles d'apparitions des membres spéciaux}
+  \begin{block}{Règles d'apparition des membres spéciaux}
   \begin{itemize}
   \item  Si un constructeur non-trivial est déclaré, le constructeur par défaut n'est pas généré
    \item Si un destructeur virtuel est déclaré, le destructeur par défaut n'est pas déclaré
-   \item Si un constructeur/assignment par rvalue est déclaré alors:
+   \item Si un constructeur/affectation par rvalue est déclaré, alors
   \begin{itemize}
-      \item Pas de constructeur par copie par défaut
-      \item Pas d'assignment par défaut
+      \item pas de constructeur par copie par défaut
+      \item pas d'affectation par défaut
   \end{itemize}
-   \item  Si un constructeur par copie, par rvalue, un destructeur ou un assignement est défini
+   \item  Si un constructeur par copie, par rvalue, un destructeur ou une
+     affectation est défini, alors
   \begin{itemize}
-    \item Pas de constructuer par rvalue par défaut
-    \item Pas d'assignement par rvalue par défaut
+    \item pas de constructeur par rvalue par défaut
+    \item pas d'affectation par rvalue par défaut
   \end{itemize}
   \end{itemize}
   \end{block}
@@ -169,14 +170,14 @@
 
 \frame
 {
-  \frametitle{La régle des 5 en action}
+  \frametitle{La règle des 5 en action}
   \only<1>{\sourcecodecpplines{code/rule5.cpp}{1}{17}}
   \only<2>{\sourcecodecpplines{code/rule5.cpp}{18}{35}}  
 }
 
 \frame
 {
-  \frametitle{La règles du 0}
+  \frametitle{La règle du 0}
   \begin{block}{Principes}
   \begin{itemize}
   \item Application du Single Responsability Principle
@@ -188,7 +189,7 @@
   \begin{block}{Mise en pratique}
   \begin{itemize}
   \item Conteneurs
-  \item Pointeurs à sémantique Riche
+  \item Pointeurs à sémantique riche
   \item Autres classes standards de ressources systèmes
   \end{itemize}
   \end{block}{}
@@ -196,7 +197,7 @@
 
 \frame
 {
-  \frametitle{La régle des 5 en action}
+  \frametitle{La règle des 5 en action}
   \only<1>{\sourcecodecpp{code/rule0.cpp}}
   \only<2>{\sourcecodecpp{code/proper.cpp}}
 }
@@ -216,7 +217,7 @@
   \begin{itemize}
   \item Sémantique de propriété : \texttt{unique\_ptr}
   \item Sémantique de partage : \texttt{shared\_ptr} 
-  \item Sémantique de partage faible: \texttt{weak\_ptr}
+  \item Sémantique de partage faible : \texttt{weak\_ptr}
   \end{itemize}
   \end{block}{}
 }
@@ -228,8 +229,8 @@
     \begin{block}{Principes}
   \begin{itemize}
   \item Pointeur à propriétaire unique
-  \item Ne peut être copié mis seulement transféré
-  \item Transfert = Transfert de propriété
+  \item Ne peut être copié mais seulement transféré
+  \item Transfert = transfert de propriété
   \end{itemize}
   \end{block}
   }
@@ -247,7 +248,7 @@
   \begin{block}{Principes}
   \begin{itemize}
   \item Pointeur à compteur de références
-  \item Libère la mémoire lorsque aucune référence pointe sur lui
+  \item Libère la mémoire lorsque aucune référence ne pointe sur lui
   \item Cycles gérés par \texttt{weak\_ptr}
   \end{itemize}
   \end{block}

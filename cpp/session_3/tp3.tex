@@ -1,0 +1,145 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[french]{babel}
+\usepackage{listings}
+\usepackage{parskip}
+
+\lstset{language=C++,basicstyle=\small\tt,showstringspaces=false}
+
+\title{\vspace{-2cm}Programmation C++ Avancée}
+\author{Joel Falcou \and Guillaume Melquiond}
+\date{8 décembre 2015}
+
+\begin{document}
+\maketitle
+
+\section{Pointeurs C}
+
+L'objectif est de construire des graphes dirigés en s'appuyant sur la
+classe suivante qui représente un nœud d'un tel graphe.
+
+\begin{lstlisting}
+class node;
+typedef node *node_ptr;
+class node {
+  std::vector<node_ptr> children;
+};
+\end{lstlisting}
+
+Pourquoi le vecteur \lstinline|children| contient-il des pointeurs vers
+des nœuds et non pas les nœuds eux-mêmes ? À quelle catégorie de graphes
+serait-on limité si c'était le cas ?
+
+Ajoutez à la classe \lstinline|node| un constructeur qui prend une chaîne
+de caractère en argument (l'étiquette du nœud). Ajoutez un destructeur
+qui affiche l'étiquette du nœud détruit.
+
+Ajoutez une méthode \lstinline|node::add_child(node_ptr)| qui ajoute au
+vecteur \lstinline|children| le pointeur passé en argument.
+
+Testez votre classe avec le code suivant :
+\begin{lstlisting}
+int main() {
+  node_ptr a(new node("a"));
+  node_ptr b(new node("b"));
+  node_ptr c(new node("c"));
+  node_ptr d(new node("d"));
+  a->add_child(b);
+  a->add_child(c);
+  d->add_child(b);
+  return 0;
+}
+\end{lstlisting}
+
+Constatez qu'aucun destructeur n'est appelé. Pourquoi la mémoire occupée
+par les nœuds n'est-elle pas libérée ?
+
+Ajoutez la ligne suivante avant la commande \lstinline|return| :
+\begin{lstlisting}
+delete a;
+\end{lstlisting}
+
+Constatez que le destructeur de \lstinline|a| est appelé mais pas ceux de
+ses enfants \lstinline|b| et \lstinline|c|. Pourquoi y a-t-il toujours
+une fuite mémoire ?
+
+Pour boucher cette fuite, il serait possible de modifier le destructeur
+de \lstinline|node| pour qu'il fasse \lstinline|delete| sur chacun des
+pointeurs contenus dans \lstinline|children|. Pourquoi est-ce que le
+programme ainsi obtenu plantera ?
+
+\section{Pointeurs « intelligents » C++}
+
+Reprenez le programme précédent et remplacez la définition de
+\lstinline|node_ptr| par la suivante :
+\begin{lstlisting}
+typedef std::shared_ptr<node> node_ptr;
+\end{lstlisting}
+
+Constatez que les quatre objets sont maintenant détruits et qu'il n'y a
+donc plus de fuite mémoire. Expliquez l'ordre dans lequel les
+destructeurs sont appelés.
+
+Ajoutez un cycle au graphe précédent avec la ligne suivante :
+\begin{lstlisting}
+b->add_child(a);
+\end{lstlisting}
+
+Expliquez pourquoi une fuite mémoire refait son apparition.
+
+Rappel : Tous les \lstinline|shared_ptr| pointant vers un même objet
+partagent un compteur qui indique combien ils sont à pointer vers cet
+objet. Chaque copie d'un \lstinline|shared_ptr| incrémente ce
+compteur ; chaque destruction le décrémente. Quand ce compteur atteint
+zéro, l'objet pointé est détruit puisqu'il n'y a plus aucun
+\lstinline|shared_ptr| qui pointe vers lui.
+
+\section{Pointeurs faibles}
+
+On souhaite maintenant enrichir la classe \lstinline|node| pour qu'un
+nœud sache non seulement vers qui il pointe mais aussi qui pointe vers
+lui dans le graphe. Ajoutez pour cela un champ \lstinline|node::parents|
+de type \lstinline|std::vector<node_ptr>|.
+
+La méthode \lstinline|add_child| doit maintenant être modifiée pour aussi
+ajouter son pointeur \lstinline|this| au champ \lstinline|parents| de son
+argument. Pourquoi est-ce une très mauvaise idée de convertir
+\lstinline|this| en un \lstinline|node_ptr| ?
+
+Utilisez la méthode \lstinline|shared_from_this| de la classe
+\lstinline|std::enable_shared_from_this| pour implémenter correctement
+\lstinline|add_child|.
+
+Expliquez pourquoi le champ \lstinline|parents| introduit nécessairement
+une fuite mémoire et cela même pour un graphe acyclique.
+
+Modifiez la déclaration du champ \lstinline|parents| pour qu'il soit de
+type \lstinline|std::vector<std::weak_ptr<node>>|. Vérifiez que la fuite
+mémoire a été bouchée.
+
+Rappel : Le type \lstinline|weak_ptr| partage le même compteur que
+\lstinline|shared_ptr| mais ne modifie pas sa valeur. En particulier, le
+compteur peut atteindre zéro même en présence d'un \lstinline|weak_ptr|.
+
+Ajoutez une méthode \lstinline|node::get_parents| ayant la signature
+suivante :
+\begin{lstlisting}
+std::vector<node_ptr> get_parents() const;
+\end{lstlisting}
+
+Quel intérêt présente le type de retour \lstinline|std::vector<node_ptr>|
+par rapport au type\\ \lstinline|std::vector<std::weak_ptr<node>>| ?
+
+Testez votre programme en affichant le nombre d'éléments renvoyés par
+\lstinline|b->get_parents()|.
+
+Forcez la libération de certains nœuds en exécutant \lstinline|a.reset()|
+juste avant que \lstinline|b->get_parents()| soit appelé. Que se
+passe-t-il ?
+
+Corrigez la méthode \lstinline|get_parents| pour qu'elle ne renvoie que
+les parents encore vivants.
+
+\end{document}

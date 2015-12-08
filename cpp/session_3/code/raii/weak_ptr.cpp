@@ -5,11 +5,13 @@ int main()
 
   {
     std::shared_ptr<int> p2 = wp1.lock();
-    if(p2) std::cout << *p2 << "\n";
+    if (p2) std::cout << *p2 << '\n';
+    else std::cout << "nope :(\n";
   }
 
   p1.reset();
-  std::shared_ptr<int> p3 = wp1.lock();
 
-  if(p3) std::cout << "nope :(\n";
+  std::shared_ptr<int> p3 = wp1.lock();
+  if (p3) std::cout << *p3 << '\n';
+  else std::cout << "nope :(\n";
 }
