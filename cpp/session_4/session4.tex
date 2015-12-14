@@ -61,6 +61,7 @@
         identifierstyle=,
         commentstyle=\color[rgb]{0.27,0.27,0.28},
         stringstyle=\color[rgb]{0.82,0.16,0.14},
+        morekeywords=noexcept
         }
 
 \definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
@@ -108,7 +109,7 @@
   \frametitle{Assertion}
   \begin{block}{Principe}
   \begin{itemize}
-  \item Valide les \alert{pré-conditions} d'une fonction
+  \item Permet de valider les \alert{pré-conditions} d'une fonction
   \item Fournie par \cpptext{<cassert>}
   \item Termine le programme en Debug
   \item Disparaît en Release
@@ -126,8 +127,8 @@
   \frametitle{Exception}
   \begin{block}{Exceptions définies par les utilisateurs}
   \begin{itemize}
-  \item Valide les \alert{post-conditions} d'une fonction
-  \item Effectue une sortie de portée anticipée
+  %\item Valide les \alert{post-conditions} d'une fonction
+  \item Effectue une sortie anticipée de portée
   \item Une exception = un type
   \end{itemize}
   \end{block}
@@ -143,16 +144,16 @@
   \frametitle{Garantie d'Exception}
   \begin{block}{Principe}
   \begin{itemize}
-  \item Valide les \alert{post-conditions} d'une fonction
+  \item Valide les \alert{post-conditions exceptionnelles} d'une fonction
   \item Termine le programme en Debug
   \item Disparaît en Release
   \end{itemize}
   \end{block}
-  
+
   \begin{block}{Quelles garanties ?}
   \begin{itemize}
   \item NOEXCEPT
-  \item STRONG 
+  \item STRONG
   \item BASIC
   \end{itemize}
   \end{block}
@@ -164,7 +165,7 @@
   \frametitle{Garantie d'Exception}
   \begin{block}{Niveau NOEXCEPT}
   \begin{itemize}
-  \item Succès garanti dans tous les cas
+  \item Comportement normal garanti dans tous les cas
   \item Aucune exception ne sera émise
   \item Les exceptions internes ne sont pas observables
   \item Mot-clé \cppkeyword{noexcept}
@@ -184,8 +185,8 @@
   \frametitle{Garantie d'Exception}
   \begin{block}{Niveau STRONG}
   \begin{itemize}
-  \item Les échecs sont permis
-  \item Les échecs ne modifient pas les données originelles
+  \item Comportement exceptionnel permis
+  \item En cas d'exception, les données originelles ne sont pas modifiées
   \item L'objet reste valide et cohérent
   \end{itemize}
   \end{block}
