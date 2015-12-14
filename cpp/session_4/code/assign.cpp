@@ -4,6 +4,7 @@ struct A
   {
     // STRONG ...
 
+
     return *this;
   }
 };

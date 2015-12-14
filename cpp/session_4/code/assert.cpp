@@ -2,7 +2,7 @@
 
 float f(int x)
 {
-  assert(x != 0 && "x must be nno-null");
+  assert(x != 0 && "x must be non-null");
   return 1.f/x;
 }
 

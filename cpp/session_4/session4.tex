@@ -111,12 +111,14 @@
   \item Valide les \alert{pré-conditions} d'une fonction
   \item Fournie par \cpptext{<cassert>}
   \item Termine le programme en Debug
-  \item Disparait en Release
+  \item Disparaît en Release
   \end{itemize}
   \end{block}
-  
+
+  \begin{overlayarea}{\textwidth}{4cm}
   \only<1>{\sourcecodecpplines{code/assert.cpp}{1}{7}}
   \only<2>{\sourcecodecpplines{code/assert.cpp}{9}{13}}
+  \end{overlayarea}
 }
 
 \frame
@@ -126,13 +128,14 @@
   \begin{itemize}
   \item Valide les \alert{post-conditions} d'une fonction
   \item Effectue une sortie de portée anticipée
-  \item Une exception = Un type
+  \item Une exception = un type
   \end{itemize}
   \end{block}
-  
+
+  \begin{overlayarea}{\textwidth}{5cm}
   \only<1>{\sourcecodecpplines{code/trycatch.cpp}{1}{6}}
   \only<2>{\sourcecodecpplines{code/trycatch.cpp}{8}{18}}
-
+  \end{overlayarea}
 }
 
 \frame
@@ -142,7 +145,7 @@
   \begin{itemize}
   \item Valide les \alert{post-conditions} d'une fonction
   \item Termine le programme en Debug
-  \item Disparait en Release
+  \item Disparaît en Release
   \end{itemize}
   \end{block}
   
@@ -161,17 +164,19 @@
   \frametitle{Garantie d'Exception}
   \begin{block}{Niveau NOEXCEPT}
   \begin{itemize}
-  \item Succés garantit dans tout les cas. 
-  \item Aucune exceptions ne sera émise. 
+  \item Succès garanti dans tous les cas
+  \item Aucune exception ne sera émise
   \item Les exceptions internes ne sont pas observables
-  \item Mot clé \cppkeyword{noexcept}
+  \item Mot-clé \cppkeyword{noexcept}
   \end{itemize}
   \end{block}
 
+  \begin{overlayarea}{\textwidth}{3cm}
   \only<1>{\sourcecodecpplines{code/noexcept.cpp}{1}{6}}
   \only<2>{\sourcecodecpplines{code/noexcept.cpp}{8}{13}}
   \only<3>{\sourcecodecpplines{code/noexcept.cpp}{15}{18}}
-  \only<4>{\sourcecodecpplines{code/noexcept.cpp}{20}{23}}    
+  \only<4>{\sourcecodecpplines{code/noexcept.cpp}{20}{23}}
+  \end{overlayarea}
 }
 
 \frame
@@ -180,7 +185,7 @@
   \begin{block}{Niveau STRONG}
   \begin{itemize}
   \item Les échecs sont permis
-  \item Les échecs ne modifient pas les données originales
+  \item Les échecs ne modifient pas les données originelles
   \item L'objet reste valide et cohérent
   \end{itemize}
   \end{block}
@@ -192,7 +197,7 @@
   \begin{block}{Niveau BASIC}
   \begin{itemize}
   \item Une exécution partielle de la fonction est possible
-  \item Des effets de bords peuvent avoir lieux
+  \item Des effets de bords peuvent avoir lieu
   \item Aucune fuite de ressources
   \item L'état de l'objet est valide mais pas forcément cohérent
   \end{itemize}
@@ -202,10 +207,12 @@
 \frame
 {
   \frametitle{Mise en pratique}
-  \only<1>{\sourcecodecpplines{code/assign.cpp}{1}{9}}
-  \only<2>{\sourcecodecpplines{code/assign.cpp}{11}{20}}
+  \begin{overlayarea}{\textwidth}{5cm}
+  \only<1>{\sourcecodecpplines{code/assign.cpp}{1}{10}}
+  \only<2>{\sourcecodecpplines{code/assign.cpp}{12}{21}}
   \only<3>{\sourcecodecpplines{code/copy.cpp}{1}{7}}
   \only<4>{\sourcecodecpplines{code/copy.cpp}{9}{16}}
+  \end{overlayarea}
 }
 
 \frame
