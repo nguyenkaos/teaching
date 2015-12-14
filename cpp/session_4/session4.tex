@@ -1,0 +1,218 @@
+% !TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+\documentclass[svgnames]{beamer}
+\setlength{\tabcolsep}{3em}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          titleline=true,
+          alternativetitlepage=true% Use the fancy title page.
+          ]{Torino}
+\usecolortheme{metascale}
+\usepackage{listings}
+
+\ifxetex
+  \usepackage{fontspec}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setsansfont[ItalicFont={GillSansMTPro-BookItalic}]{GillSansMTPro-Book}
+  \setmonofont{Inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\else
+  \usepackage[utf8x]{inputenc}
+  %\usepackage[nott]{inconsolata}
+  %\newcommand{\codefont}{\fontfamily{fi4}\selectfont}
+  \usepackage{inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{colortbl}
+\usepackage[frenchb]{babel}
+%\usepackage{pgfplots}
+%\usepackage{standalone}
+\usepackage{relsize}
+
+% setup tikz
+%% \usepackage{tikz}
+%% \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+%% decorations.pathreplacing,decorations.pathmorphing,shapes,%
+%% matrix,shapes.symbols,plotmarks,decorations.markings,shadows,%
+%% snakes,backgrounds}
+\def\print#1{\pgfmathparse{#1}\pgfmathresult}
+\def\colx{Blue!40}
+\def\coly{Blue!20}
+\def\colz{white}
+
+\def\C++{\textup{C}\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+
+% vertical align box
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\lstdefinestyle{customcpp}{language=C++,
+        basicstyle=\footnotesize\codefont,
+        tabsize=2,
+        numberstyle=\footnotesize,
+        showstringspaces=false,
+        %columns=fullflexible,
+        keywordstyle=\color[rgb]{0.64,0.13,0.11},
+        identifierstyle=,
+        commentstyle=\color[rgb]{0.27,0.27,0.28},
+        stringstyle=\color[rgb]{0.82,0.16,0.14},
+        }
+
+\definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
+\pgfdeclareimage[interpolate=true,width=9cm]{move}{move}
+
+\NoAutoSpaceBeforeFDP
+
+\title{Programmation C++ Avancée}
+\subtitle{Session 4 -- Gestions des Erreurs}
+\author{Joel Falcou \and Guillaume Melquiond}
+\institute{Laboratoire de Recherche en Informatique}
+\date{}
+
+\subject{Computer Science}
+
+\begin{document}
+\include{sourcecode}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\setcounter{framenumber}{0}
+
+\frame
+{
+  \frametitle{Gestion des Erreurs}
+  \begin{block}{Quoi et Pourquoi}
+  \begin{itemize}
+  \item Valider l'état d'un objet avant l'appel d'une fonction
+  \item Rapporter des erreurs inattendues
+  \item Rapporter des événements indépendant du code
+  \end{itemize}
+  \end{block}
+ 
+  \begin{block}{Mise en \oe{uvre}}
+  \begin{itemize}
+  \item Assertion
+  \item Exception
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Assertion}
+  \begin{block}{Principe}
+  \begin{itemize}
+  \item Valide les \alert{pré-conditions} d'une fonction
+  \item Fournie par \cpptext{<cassert>}
+  \item Termine le programme en Debug
+  \item Disparait en Release
+  \end{itemize}
+  \end{block}
+  
+  \only<1>{\sourcecodecpplines{code/assert.cpp}{1}{7}}
+  \only<2>{\sourcecodecpplines{code/assert.cpp}{9}{13}}
+}
+
+\frame
+{
+  \frametitle{Exception}
+  \begin{block}{Exceptions définies par les utilisateurs}
+  \begin{itemize}
+  \item Valide les \alert{post-conditions} d'une fonction
+  \item Effectue une sortie de portée anticipée
+  \item Une exception = Un type
+  \end{itemize}
+  \end{block}
+  
+  \only<1>{\sourcecodecpplines{code/trycatch.cpp}{1}{6}}
+  \only<2>{\sourcecodecpplines{code/trycatch.cpp}{8}{18}}
+
+}
+
+\frame
+{
+  \frametitle{Garantie d'Exception}
+  \begin{block}{Principe}
+  \begin{itemize}
+  \item Valide les \alert{post-conditions} d'une fonction
+  \item Termine le programme en Debug
+  \item Disparait en Release
+  \end{itemize}
+  \end{block}
+  
+  \begin{block}{Quelles garanties ?}
+  \begin{itemize}
+  \item NOEXCEPT
+  \item STRONG 
+  \item BASIC
+  \end{itemize}
+  \end{block}
+}
+
+
+\frame
+{
+  \frametitle{Garantie d'Exception}
+  \begin{block}{Niveau NOEXCEPT}
+  \begin{itemize}
+  \item Succés garantit dans tout les cas. 
+  \item Aucune exceptions ne sera émise. 
+  \item Les exceptions internes ne sont pas observables
+  \item Mot clé \cppkeyword{noexcept}
+  \end{itemize}
+  \end{block}
+
+  \only<1>{\sourcecodecpplines{code/noexcept.cpp}{1}{6}}
+  \only<2>{\sourcecodecpplines{code/noexcept.cpp}{8}{13}}
+  \only<3>{\sourcecodecpplines{code/noexcept.cpp}{15}{18}}
+  \only<4>{\sourcecodecpplines{code/noexcept.cpp}{20}{23}}    
+}
+
+\frame
+{
+  \frametitle{Garantie d'Exception}
+  \begin{block}{Niveau STRONG}
+  \begin{itemize}
+  \item Les échecs sont permis
+  \item Les échecs ne modifient pas les données originales
+  \item L'objet reste valide et cohérent
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Garantie d'Exception}
+  \begin{block}{Niveau BASIC}
+  \begin{itemize}
+  \item Une exécution partielle de la fonction est possible
+  \item Des effets de bords peuvent avoir lieux
+  \item Aucune fuite de ressources
+  \item L'état de l'objet est valide mais pas forcément cohérent
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Mise en pratique}
+  \only<1>{\sourcecodecpplines{code/assign.cpp}{1}{9}}
+  \only<2>{\sourcecodecpplines{code/assign.cpp}{11}{20}}
+  \only<3>{\sourcecodecpplines{code/copy.cpp}{1}{7}}
+  \only<4>{\sourcecodecpplines{code/copy.cpp}{9}{16}}
+}
+
+\frame
+{
+  \frametitle{RAII et capture}
+  \sourcecodecpp{code/nocapture.cpp}
+}
+
+
+\end{document}
