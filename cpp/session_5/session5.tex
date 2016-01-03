@@ -1,0 +1,329 @@
+% !TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+\documentclass[svgnames]{beamer}
+\setlength{\tabcolsep}{3em}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          titleline=true,
+          alternativetitlepage=true% Use the fancy title page.
+          ]{Torino}
+\usecolortheme{metascale}
+\usepackage{listings}
+
+\ifxetex
+  \usepackage{fontspec}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setsansfont[ItalicFont={GillSansMTPro-BookItalic}]{GillSansMTPro-Book}
+  \setmonofont{Inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\else
+  \usepackage[utf8x]{inputenc}
+  %\usepackage[nott]{inconsolata}
+  %\newcommand{\codefont}{\fontfamily{fi4}\selectfont}
+  \usepackage{inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{colortbl}
+\usepackage[frenchb]{babel}
+%\usepackage{pgfplots}
+%\usepackage{standalone}
+\usepackage{relsize}
+
+% setup tikz
+%% \usepackage{tikz}
+%% \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+%% decorations.pathreplacing,decorations.pathmorphing,shapes,%
+%% matrix,shapes.symbols,plotmarks,decorations.markings,shadows,%
+%% snakes,backgrounds}
+\def\print#1{\pgfmathparse{#1}\pgfmathresult}
+\def\colx{Blue!40}
+\def\coly{Blue!20}
+\def\colz{white}
+
+\def\C++{\textup{C}\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+
+% vertical align box
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\lstdefinestyle{customcpp}{language=C++,
+        basicstyle=\footnotesize\codefont,
+        tabsize=2,
+        numberstyle=\footnotesize,
+        showstringspaces=false,
+        %columns=fullflexible,
+        keywordstyle=\color[rgb]{0.64,0.13,0.11},
+        identifierstyle=,
+        commentstyle=\color[rgb]{0.27,0.27,0.28},
+        stringstyle=\color[rgb]{0.82,0.16,0.14},
+        morekeywords=noexcept
+        }
+
+\definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
+\pgfdeclareimage[interpolate=true,width=9cm]{move}{move}
+
+\NoAutoSpaceBeforeFDP
+
+\title{Programmation C++ Avancée}
+\subtitle{Session 5 -- Patrons de Fonctions et de Classes}
+\author{Joel Falcou \and Guillaume Melquiond}
+\institute{Laboratoire de Recherche en Informatique}
+\date{}
+
+\subject{Computer Science}
+
+\begin{document}
+\include{sourcecode}
+\include{slidelst}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\setcounter{framenumber}{0}
+\frame
+{
+  \frametitle{Contexte}
+  \begin{block}{Qu'est-ce qu'un \texttt{template} ?}
+  \begin{itemize}
+  \footnotesize
+  \item Modèle générique de code de fonction ou de classe
+  \item Paramétrable par des types abstraite ou des valeurs constantes
+  \item Spécifier ces paramètres \textbf{instantie} le \texttt{template} et génére du code
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Pourquoi les templates en C++ ?}
+  \begin{itemize}
+  \item Base de la généricité en C++
+  \item Support pour le polymorphisme statique
+  \item Aller au delà des macros du préprocesseurs
+  \end{itemize}
+  \end{block}
+}
+  
+\frame
+{
+  \frametitle{Principe de bases}
+  \begin{block}{Syntaxe}
+  \begin{itemize}
+  \item Paramètrage introduit par : \texttt{template<>}
+  \item Chaque paramètres peut être:
+  \begin{itemize}
+  \item \textbf{un type} introduit par le mot clé \texttt{class} ou \texttt{typename}
+  \lstparamtype
+  \item \textbf{une valeur} de type entière
+  \lstparaminteger
+  \item \textbf{un type template} déclaré \textit{in situ}
+  \lstparamtmp  
+  \item Ces paramètres peuvent avoir un valeur par défaut
+  \lstparamdefault
+  \end{itemize}
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Fonction template}
+  \begin{block}{Principes}
+  \begin{itemize}
+  \footnotesize
+  \item Une \textbf{fonction template} est un modèle de génération de fonction paramétrable
+  \item Elle remplace avantageusement les macros en étant type-safe
+  \vspace{0.5cm}
+  \lsttmpfunction
+  \item L'appel d'une \textbf{fonction template} s'effectue comme pour une fonction normale
+  \item Le compilateur \textbf{infére} des arguments le type des paramètres.
+  \vspace{0.5cm}
+  \lsttmpfunctioncall
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Fonction template}
+  \begin{block}{Exemple : la fonction \texttt{swap}}
+  \only<1>{ \lstnormalswap }
+  \only<2>{ \lsttmpswap    }
+  \end{block}
+}
+
+
+\frame
+{
+  \frametitle{Fonction template}
+  \begin{block}{Algorithme de résolution d'un appel \texttt{template}}
+  \footnotesize Quand le compilateur détecte un appel de fonction il suit l'algorithme suivant pour associer la bonne fonction.
+  \begin{enumerate}
+  \footnotesize 
+  \item Dans les fonctions non templates:
+  \begin{enumerate}
+  \footnotesize 
+  \item Une seule association exacte : \alert{résolution terminée}
+  \item Plusieurs association exacte : \alert{erreur}
+  \item Aucune : \alert{Allez en 2}
+  \end{enumerate}
+  \item Dans les fonctions templates:
+  \begin{enumerate}
+  \footnotesize 
+  \item Une seule association exacte : \alert{résolution terminée}
+  \item Plusieurs association exacte : \alert{erreur}
+  \item Aucune : \alert{Allez en 3}
+  \end{enumerate}
+  \item Réexaminer les non templates de façons classiques avec d'éventuelles conversions de type.
+ \end{enumerate}
+ \end{block}
+}
+
+\frame
+{
+  \frametitle{Fonction template}
+  \begin{block}{Cas particulier - Retour template}
+  \lsttmpreturn
+  \end{block}
+}
+\frame
+{
+  \frametitle{Templates variadiques}
+  \begin{block}{Applications aux fonctions}
+  \begin{itemize}
+  \item Remplacement type-safe du \cpptext{...} du C
+  \item Notion de \textit{paramaters pack}
+  \item Déduction automatique des types
+  \end{itemize}
+  
+  \only<1>{\sourcecodecpplines{code/vararg.cpp}{3}{6}}
+  \only<2>{\sourcecodecpplines{code/vararg.cpp}{8}{12}}  
+  \only<3>{\sourcecodecpplines{code/vararg.cpp}{14}{21}}  
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Fonctions et inférence de type}
+  \begin{block}{Impact sur le retour des fonctions}
+  \begin{itemize}
+  \item \texttt{auto} et \texttt{decltype} simplifient l'\'ecriture
+  du prototype des fonctions
+  \item Notion de \textit{trailing return type}
+  \end{itemize}
+
+  \only<1>{\sourcecodecpp{code/trail03.cpp}}
+  \only<2>{\sourcecodecpp{code/trail11.cpp}}
+  \only<3>{\sourcecodecpp{code/trail14.cpp}}
+  
+  \end{block}{}
+}
+\frame
+{
+  \frametitle{Classe template}
+  \begin{block}{Principes}
+  \begin{itemize}
+  \footnotesize
+  \item Une \textbf{classe \texttt{template}} est un modèle de génération de classe paramétrable
+  \item Elle permet de gérer des variantes de classes sans polymorphisme dynamique
+  \item Les paramètres \texttt{template}[s] sont à spécifier explicitement.
+  \item Une classe \texttt{template} ne devient un type complet que lorsqu'elle est entièrement spécifiée.
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Quelques détails ...}
+  \begin{itemize}
+  \footnotesize
+  \item Une classe non \texttt{template} peut avoir une ou plusieurs méthodes \texttt{template}[s]
+  \item Une classe \texttt{template} peut avoir une ou plusieurs méthodes \texttt{template}[s] paramétrés sur un autre jeu de type abstrait
+  \item Si \texttt{A} hérite de \texttt{B}, et que \texttt{C} est une classe \texttt{template}, il n'existe aucun lien implicite
+  entre \texttt{C<A>} et \texttt{C<B>}.
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Classe template}
+  \begin{block}{Exemple : la classe \texttt{pair<T1,T2>}}
+
+  \lsttmppair
+
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Atelier Pratique}
+  \begin{block}{La classe \texttt{fixed\_array<T,N>}}
+  \begin{itemize}
+  \item \texttt{fixed\_array<T,N>} représente un tableau de \texttt{N} éléments de type T
+  \item Proposez une implantation simple fournissant les opérations classiques sur les tableaux
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Indices}
+  \begin{itemize}
+  \item \texttt{T} et \texttt{N} permettent de reconstruire un \texttt{T tab[N]}
+  \item Que deviennent \texttt{size}, \texttt{empty} etc ...
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Spécialisation de template}
+  \begin{block}{Cas d'utilisation}
+  \begin{itemize}
+  \item Quid d'un \texttt{fixed\_array<T,0>} ?
+  \item Specifier des comportement differents en fonctions du paramètrage
+  \item Version statique du patron de conception "Strategy" ou "State"
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Mise en \oe{uvre}}
+  \begin{itemize}
+  \item Spécialisation totale
+  \item Spécialisation partielle
+  \end{itemize}
+  \end{block}{}
+}
+
+\frame
+{
+  \frametitle{Spécialisation de template}
+  \begin{block}{Spécialisation totale}
+  Permet de spécifier un \texttt{template} entièrement pour un jeu de paramètre donné.
+  \vspace{0.5cm}
+  \lstemptypair
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Spécialisation de template}
+  \begin{block}{Spécialisation partielle}
+  Permet de spécifier certain arguments du \texttt{template} afin de spécialiser une partie de son comportement
+  \lstpartialspec
+  \begin{center}\alert{Attention aux ambiguités !}\end{center}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Spécialisation de template}
+  \begin{block}{Selecteur conditionnel de type}
+  \only<1>
+  {
+    \begin{block}{Spécifications}
+    \texttt{if\_<Bool,T1,T2>::type} s'évalue en \texttt{T1} si \texttt{Bool == true} et \texttt{T12} sinon.
+    \end{block}
+  }
+  \only<2>{ \lststaticif }
+  \only<3>{ \lststaticifusage }
+  \end{block}
+}
+
+\end{document}
