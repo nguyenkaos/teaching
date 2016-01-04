@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lstparamtype{%
 \begin{lstlisting}
-template<typename T> T maximum(T a, T b );
+template<typename T> T maximum(T a, T b);
 \end{lstlisting}}
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lstparaminteger{%
@@ -13,7 +13,7 @@ template<int Value> struct number;
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lstparamtmp{%
 \begin{lstlisting}
-template<template<class> class U, class T> 
+template<template<class> class U, class T>
 U<T> make_container(std::size_t N, T const& value);
 \end{lstlisting}}
 
@@ -24,7 +24,7 @@ template<class T = int, int Value = 0> struct number;
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttmpfunction{%
 \begin{lstlisting}
-template<typename T> T maximum(T a, T b )
+template<typename T> T maximum(T a, T b)
 {
   return a > b ? a : b;
 }
@@ -59,7 +59,7 @@ void swap(float& a, float& b)
 \begin{lstlisting}
 template<class T> void swap(T& a, T& b)
 {
-  int tmp(a);
+  T tmp(a);
   a = b;
   b = tmp;
 }
@@ -95,19 +95,19 @@ template<> struct pair<void,void>
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttmpreturn{%
 \begin{lstlisting}
-template<typename T> T Fonction() { return T(); } 
+template<typename T> T Fonction() { return T(); }
 
 int x = Fonction();      // KO
 int x = Fonction<int>(); // OK
 
-template <typename T> void Fonction2( T x1, T x2 ) {} 
+template <typename T> void Fonction2( T x1, T x2 ) {}
 
 int x1 = 5;
 double x2 = 6.5;
 
-Fonction( x1, x2 );                        // KO
-Fonction<double>( x1, x2 );                // OK
-Fonction( static_cast<double>( x1 ), x2 ); // OK
+Fonction2( x1, x2 );                      // KO
+Fonction2<double>( x1, x2 );              // OK
+Fonction2( static_cast<double>(x1), x2 ); // OK
 \end{lstlisting}}
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lstpartialspec{%
@@ -123,38 +123,6 @@ template<class T> struct add_ref<T const>
 
 template<class T> struct add_ref<T const&> 
 { typedef T const& type; };
-\end{lstlisting}}
-
-
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lststaticif{%
-\begin{lstlisting}
-template<bool Condition, typename T, typename F> class if_;
-
-template<typename T, typename F> struct if_<true, T, F>
-{
-  typedef T_ type;
-};
-
-template<typename T, typename F> struct if_<false, T, F>
-{
-  typedef F type;
-};
-\end{lstlisting}}
-
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lststaticifusage{%
-\begin{lstlisting}
-int main()
-{
-  typename if_<true, int, void*>::result number(3);
-  typename if_<false, int, void*>::result pointer(&number);
-
-   typedef typename if_<(sizeof(void *) > sizeof(uint32_t))
-                       , uint64_t
-                       , uint32_t
-                       >::type  integral_ptr_t;
-	  
-   integral_ptr_t ptr = reinterpret_cast<integral_ptr_t>(pointer);
-}
 \end{lstlisting}}
 
 \lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lstdimension{%
