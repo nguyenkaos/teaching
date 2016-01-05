@@ -1,0 +1,166 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[french]{babel}
+\usepackage{listings}
+\usepackage{parskip}
+
+\lstset{language=C++,basicstyle=\small\tt,showstringspaces=false}
+
+\title{\vspace{-2cm}Programmation C++ Avancée}
+\author{Joel Falcou \and Guillaume Melquiond}
+\date{5 janvier 2016}
+
+\begin{document}
+\maketitle
+
+L'objectif de ce TP est de définir une classe proposant des
+fonctionnalités proches de \lstinline|std::array<T,N>| (la version C++
+d'un tableau C de type \lstinline|T[N]|). L'implantation sera cependant
+un peu plus subtile dans le cas où le tableau est grand pour éviter qu'il
+ne fasse déborder la pile et pour éviter que certaines opérations comme
+\lstinline|move| ou \lstinline|swap| soient trop coûteuses.
+
+Les trois classes \texttt{template} définies ci-dessous auront la
+signature suivante :
+\begin{lstlisting}
+template<typename T, std::size N>
+class my_new_array {
+  ...
+};
+\end{lstlisting}
+
+\section{Petits tableaux}
+
+Définissez une classe template \lstinline|small_array<T,N>| contenant un
+champ privé ayant le type \lstinline|T[N]|. Ajoutez les versions par
+défaut de toutes les méthodes spéciales : constructeur par défaut,
+constructeur par copie, constructeur par transfert, affectation par
+copie, affectation par transfert, destructeur.
+
+Ajoutez deux opérateurs à la classe permettant d'accéder aux éléments
+comme si c'était un simple tableau :
+\begin{lstlisting}
+T &small_array<T,N>::operator[](std::size_t i);
+T const &small_array<T,N>::operator[](std::size_t i) const;
+\end{lstlisting}
+
+Question : pourquoi faut-il définir deux opérateurs crochets quasiment
+identiques ? (Voir le code de test ci-dessous pour un indice.)
+
+Ajoutez à ces opérateurs des assertions pour assurer que le programme se
+termine en cas d'accès hors des bornes. Marquez ces opérateurs comme
+étant \lstinline|noexcept|.
+
+Testez votre classe en utilisant le code ci-dessous :
+\begin{lstlisting}
+int main() {
+  small_array<int, 4> t;
+  t[2] = 42;
+  small_array<int, 4> const u = t;
+  for (std::size_t i = 0; i < 4; ++i) {
+    std::cout << '[' << i << "] = " << u[i] << '\n';
+  }
+  t[4] = 0; // assertion failed!
+}
+\end{lstlisting}
+
+Question : est-ce que votre code affiche des valeurs surprenantes pour
+les cases autres que la deuxième ? Si oui, c'est normal (et sinon, c'est
+un coup de chance). Pourquoi ?
+
+Ajoutez deux méthodes qui se comportent comme les opérateurs crochets,
+mais qui lèvent cette fois des exceptions quand les accès ont lieu hors
+des bornes :
+\begin{lstlisting}
+T &small_array<T,N>::at(std::size_t i);
+T const &small_array<T,N>::at(std::size_t i) const;
+\end{lstlisting}
+
+Testez vos nouvelles méthodes en modifiant le code de test ci-dessus.
+
+\section{Grands tableaux}
+
+Testez votre classe avec le code suivant :
+\begin{lstlisting}
+int main() {
+  small_array<int, 1000 * 1000 * 10> t;
+  t[2] = 42;
+}
+\end{lstlisting}
+
+Question : pourquoi le programme plante-t-il ?
+
+Définissez une classe template \lstinline|large_array<T,N>| dont le champ
+privé a maintenant le type suivant :
+\begin{lstlisting}
+std::unique_ptr<small_array<T,N>>
+\end{lstlisting}
+
+Ajoutez des opérateurs crochets et des méthodes \lstinline|at| permettant
+d'accéder aux éléments du tableau.
+
+Question : pourquoi le constructeur par défaut fourni par le compilateur
+ne convient-il pas ?
+
+Définissez un constructeur par défaut et testez votre classe avec le code
+suivant :
+\begin{lstlisting}
+int main() {
+  large_array<int, 1000 * 1000 * 10> t;
+  t[2] = 42;
+}
+\end{lstlisting}
+
+Les versions du constructeur par copie et de l'opérateur d'affectation
+par copie fournies par le compilateur ne conviennent pas non
+plus. Définissez des versions adaptées à \lstinline|large_array|.
+
+Complétez votre code de test en vous inspirant de celui utilisé pour les
+petits tableaux afin de vérifier que votre constructeur par copie
+fonctionne correctement.
+
+Fournissez une méthode \lstinline|swap| qui échange le contenu de deux
+tableaux larges en temps constant :
+\begin{lstlisting}
+void large_array<T,N>::swap(large_array &);
+\end{lstlisting}
+
+Proposez une variante de l'opérateur d'affectation par copie qui
+fournisse une garantie plus forte concernant les exceptions : si une
+exception est levée lors de la copie, le tableau original est rendu
+inchangé plutôt qu'à moitié modifié. (Note : cette garantie n'est pas
+fournie par \lstinline|small_array|).
+
+Question : quel est l'inconvénient de cette variante ?
+
+Les fonctions template incorrectes ne sont pas forcément détectées par le
+compilateur tant qu'elles ne sont pas utilisées par du code
+non-template. Modifiez le code de test afin que l'opérateur d'affectation
+par copie soit lui-aussi utilisé, de même pour la méthode
+\lstinline|swap|.
+
+\section{Tableaux malins}
+
+Définissez un type template qui se résout vers
+\lstinline|small_array<T,N>| s'il est suffisamment petit (inférieur à 16
+octets par exemple) et vers \lstinline|large_array<T,N>| sinon.
+
+Testez votre type avec le code suivant en faisant varier la taille passée
+en paramètre. On pourra ajouter une assertion dans le constructeur de
+\lstinline|large_array| pour s'assurer qu'il n'est pas appelé avec un
+petit \lstinline|N|.
+\begin{lstlisting}
+int main() {
+  my_array<int, 1000 * 1000 * 10> t;
+  t[2] = 42;
+}
+\end{lstlisting}
+
+Note : la construction \lstinline|typedef| n'accepte pas les paramètres
+template. On pourra utiliser la construction
+\lstinline|template<typename T, std::size_t N> using my_array = ...|
+à la place.
+
+\end{document}
