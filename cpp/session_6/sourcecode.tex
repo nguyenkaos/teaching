@@ -1,0 +1,42 @@
+% Copyright © 2014 Lénaïc Bagnères, hnc@singularity.fr
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+% http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+
+% C++
+\definecolor{colorkatetext}{RGB}{31,28,27}
+\definecolor{colorkatetype}{RGB}{0,87,174}
+\definecolor{colorkateint}{RGB}{176,128,0}
+\definecolor{colorkatechar}{RGB}{146,76,157}
+\definecolor{colorkatestring}{RGB}{191,3,3}
+\definecolor{colorkatecomment}{RGB}{137,136,135}
+
+\newcommand{\sourcecodecpp}{\begingroup \catcode`_=12 \sourcecodecppcmd}
+\newcommand{\sourcecodecppcmd}[1]{ \lstinputlisting[style=customcpp]{#1} \endgroup}
+
+\newcommand{\sourcecodecpplines}{\begingroup \catcode`_=12 \sourcecodecpplinescmd}
+\newcommand{\sourcecodecpplinescmd}[3]{ \lstinputlisting[style=customcpp, firstline=#2, lastline=#3]{#1} \endgroup}
+
+\newcommand{\sourcecodecpplast}{\begingroup \catcode`_=12 \sourcecodecpplastcmd}
+\newcommand{\sourcecodecpplastcmd}[2]{ \lstinputlisting[style=customcpp, lastline=#2]{#1} \endgroup}
+
+\newcommand{\sourcecodecppfirst}{\begingroup \catcode`_=12 \sourcecodecppfirstcmd}
+\newcommand{\sourcecodecppfirstcmd}[2]{ \lstinputlisting[style=customcpp, firstline=#2]{#1} \endgroup}
+
+\newcommand{\cpptext}[1]{\textcolor{colorkatetext}{\texttt{#1}}}
+\newcommand{\cppkeyword}[1]{\textbf{\textcolor{colorkatetext}{\texttt{#1}}}}
+\newcommand{\cpptype}[1]{\textcolor{colorkatetype}{\texttt{#1}}}
+\newcommand{\cppint}[1]{\textcolor{colorkateint}{\texttt{$#1$}}}
+\newcommand{\cppchar}[1]{\textcolor{colorkatechar}{\texttt{#1}}}
+\newcommand{\cppstring}[1]{\textcolor{colorkatestring}{\texttt{#1}}}
+\newcommand{\cppcomment}[1]{\textcolor{colorkatecomment}{\texttt{#1}}}
