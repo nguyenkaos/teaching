@@ -1,0 +1,97 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage[french]{babel}
+\usepackage{listings}
+\usepackage{parskip}
+
+\lstset{language=C++,basicstyle=\small\tt,showstringspaces=false}
+
+\title{\vspace{-2cm}Programmation C++ Avancée}
+\author{Joel Falcou \and Guillaume Melquiond}
+\date{12 janvier 2016}
+
+\begin{document}
+\maketitle
+
+Les types suivants seront manipulés lors de ce TP :
+\begin{lstlisting}
+template<std::size_t dim> struct point { double coords[dim]; };
+template<std::size_t dim> using points = std::vector<point<dim>>;
+\end{lstlisting}
+
+\section{Création et affichage de points}
+
+Définissez une fonction pour créer un point avec des coordonnées
+aléatoires comprises entre 0 et 1. Elle aura la signature suivante :
+\begin{lstlisting}
+template<std::size_t dim> point<dim> createRandom();
+\end{lstlisting}
+
+Définissez une fonction pour afficher les coordonnées d'un point sur le
+\emph{stream} passé en argument. Elle aura la signature suivante :
+\begin{lstlisting}
+template<std::size_t dim>
+std::ostream &operator<<(std::ostream &out, point<dim> const &p);
+\end{lstlisting}
+
+Testez votre code à l'aide d'une instruction comme la suivante :
+\begin{lstlisting}
+std::cout << createRandom<3>() << '\n';
+\end{lstlisting}
+
+\section{Création et affichage de points}
+
+Combinez l'algorithme \lstinline|std::generate_n|, l'itérateur renvoyé
+par \lstinline|std::back_inserter| et la fonction
+\lstinline|createRandom| pour remplir un vecteur de type
+\lstinline|points<2>| avec 5 points aléatoires. (Note : le code obtenu ne
+doit pas dépasser une instruction.)
+
+Combinez l'algorithme \lstinline|std::for_each| avec une fonction anonyme
+affichant un point sur la sortie standard pour afficher le contenu du
+vecteur précédent. (Note : le code obtenu ne doit pas dépasser une
+instruction.)
+
+\section{Calcul du point le proche}
+
+Définissez une fonction calculant la distance euclidienne entre deux points :
+\begin{lstlisting}
+template<std::size_t dim>
+double dist(point<dim> const &p1, point<dim> const &p2);
+\end{lstlisting}
+
+En utilisant l'algorithme \lstinline|min_element|, définissez une
+fonction prenant un point $p$ et un vecteur de points en argument et
+renvoyant le point du vecteur le plus proche de $p$ :
+\begin{lstlisting}
+template<std::size_t dim>
+point<dim> const &closest(points<dim> const &pts, point<dim> const &p);
+\end{lstlisting}
+
+Testez vos fonctions en remplissant un vecteur de points aléatoires puis
+en affichant celui qui est le plus proche du point $(0.5, 0.5, \ldots)$.
+
+\section{Calcul du barycentre}
+
+En utilisant l'algorithme \lstinline|std::transform|, définissez une
+fonction prenant deux points en arguments et renvoyant le point obtenu en
+sommant deux à deux les coordonnées des points :
+\begin{lstlisting}
+template<std::size_t dim>
+point<dim> operator+(point<dim> const &p1, point<dim> const &p2);
+\end{lstlisting}
+
+En utilisant l'algorithme \lstinline|std::accumulate| pour sommer tous
+les points, définissez une fonction qui calcule l'isobarycentre d'un
+vecteur de points :
+\begin{lstlisting}
+template<std::size_t dim> point<dim> barycenter(points<dim> const &pts);
+\end{lstlisting}
+
+Testez vos fonctions en remplissant un vecteur de points aléatoires puis
+en affichant son barycentre ; ce dernier devrait être assez proche du
+point $(0.5, 0.5, \ldots)$ s'il n'y a pas d'erreur.
+
+\end{document}

@@ -7,9 +7,9 @@ bool process_buffer(std::vector<Buffer> const& mems)
 {
   std::vector<Buffer>::const_iterator i = mems.cbegin();
 
-  for( ; i != v.cend(); ++i)
+  for ( ; i != mems.cend(); ++i)
   {
-    if (match_pattern(*i)) 
+    if (match_pattern(*i))
       return true;
   }
 

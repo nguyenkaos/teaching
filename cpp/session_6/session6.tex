@@ -94,7 +94,7 @@
   \item Parcourables via des ...
   \end{itemize}
   \end{block}{}
-  \begin{block}{Iterateurs}<2->
+  \begin{block}{Itérateurs}<2->
   \begin{itemize}\footnotesize
   \item Abstraction du pointeur
   \item Utilisables dans des ...
@@ -104,7 +104,7 @@
   \begin{itemize}\footnotesize
   \item Parcours décorrélé du Conteneur
   \item Garantie de complexité et de correction
-  \item Paramétrables via des fonctions utilisateurs
+  \item Paramétrables via des fonctions utilisateur
   \end{itemize}
   \end{block}{}
 }
@@ -114,18 +114,18 @@
   \frametitle{Conteneurs standards}
   \begin{block}{Conteneurs Séquentiels}
   \begin{itemize}
-  \item \cpptype{vector},\cpptype{array}
-  \item \cpptype{list},\cpptype{forward\_list}
+  \item \cpptype{vector}, \cpptype{array}
+  \item \cpptype{list}, \cpptype{forward\_list}
   \item \cpptype{deque}
   \end{itemize}
   \end{block}{}
 
   \begin{block}{Conteneurs Associatifs}
   \begin{itemize}
-  \item \cpptype{set},\cpptype{map}
-  \item \cpptype{multi\_set},\cpptype{multi\_map}
-  \item \cpptype{unordered\_set},\cpptype{unordered\_map}
-  \item \cpptype{unordered\_multi\_set},\cpptype{unordered\_multi\_map}
+  \item \cpptype{set}, \cpptype{map}
+  \item \cpptype{multi\_set}, \cpptype{multi\_map}
+  \item \cpptype{unordered\_set}, \cpptype{unordered\_map}
+  \item \cpptype{unordered\_multi\_set}, \cpptype{unordered\_multi\_map}
   \end{itemize}
   \end{block}{}
 }
@@ -137,26 +137,26 @@
   \begin{columns}[t]
     \begin{column}{5cm}
     \begin{itemize}
-    \item \texttt{all\_of,any\_of,none\_of}
+    \item \texttt{all\_of}, \texttt{any\_of}, \texttt{none\_of}
     \item \texttt{for\_each}
-    \item \texttt{count, count\_if}
-    \item \texttt{mismatch, equal}
-    \item \texttt{find, find\_if}
-    \item \texttt{find\_end, find\_first\_of}
-    \item \texttt{search, search\_n}
+    \item \texttt{count}, \texttt{count\_if}
+    \item \texttt{mismatch}, \texttt{equal}
+    \item \texttt{find}, \texttt{find\_if}
+    \item \texttt{find\_end}, \texttt{find\_first\_of}
+    \item \texttt{search}, \texttt{search\_n}
     \item \texttt{nth\_element}
-    \item \texttt{max\_element,min\_element}
+    \item \texttt{max\_element}, \texttt{min\_element}
     \end{itemize}
     \end{column}
     \begin{column}{5cm}
     \begin{itemize}
     \item \texttt{transform}
-    \item \texttt{copy,copy\_if}
-    \item \texttt{remove,remove\_if}
-    \item \texttt{replace,replace\_if}
-    \item \texttt{reverse,rotate,shuffle}
-    \item \texttt{sort, stable\_sort}
-    \item \texttt{fill, iota}
+    \item \texttt{copy}, \texttt{copy\_if}
+    \item \texttt{remove}, \texttt{remove\_if}
+    \item \texttt{replace}, \texttt{replace\_if}
+    \item \texttt{reverse}, \texttt{rotate}, \texttt{shuffle}
+    \item \texttt{sort}, \texttt{stable\_sort}
+    \item \texttt{fill}, \texttt{iota}
     \item \texttt{accumulate}
     \item \texttt{inner\_product}
     \end{itemize}
@@ -169,7 +169,7 @@
   \frametitle{Fonction anonyme}
   \begin{block}{Objectifs}
   \begin{itemize}
-  \item Augmenter la localit\'e du code
+  \item Augmenter la localité du code
   \item Simplifier le design de fonctions utilitaires
   \item Notion de \textit{closure} et de fonctions d'ordre sup\'erieur
   \end{itemize}
@@ -177,10 +177,10 @@
 
   \begin{block}{Principes}
   \begin{itemize}
-  \item Bloc de code fonctionnel sans identit\'e
-  \item Syntaxe:\\
-  \sourcecodecpp{code/imperatif/lambda.cpp}    
-  \end{itemize}    
+  \item Bloc de code fonctionnel sans identité
+  \item Syntaxe :
+  \sourcecodecpp{code/imperatif/lambda.cpp}
+  \end{itemize}
   \end{block}
 }
 
@@ -189,10 +189,10 @@
   \frametitle{Fonction anonyme}
   \begin{block}{Type de retour}
   \begin{itemize}
-  \item C++11 : Automatique si la fonction n'est qu'un \texttt{return}
-  \item C++11 : Autre cas, \`a sp\'ecifier via \texttt{->}
-  \item C++14 : D\'eduction automatique
-  \end{itemize}  
+  \item C++11 : automatique si la fonction n'est qu'un \texttt{return}
+  \item C++11 : à spécifier via \texttt{->} sinon
+  \item C++14 : déduction automatique
+  \end{itemize}
   \end{block}
 }
 
@@ -229,11 +229,13 @@
 \frame
 {
   \frametitle{Algorithmes en action}
+  \begin{overlayarea}{\textwidth}{\textheight}
   \only<1>{\sourcecodecpp{code/std/loop01.cpp}}
   \only<2>{\sourcecodecpp{code/std/loop02.cpp}}
   \only<3>{\sourcecodecpp{code/std/loop03.cpp}}
   \only<4>{\sourcecodecpp{code/std/loop04.cpp}}
   \only<5>{\sourcecodecpp{code/std/loop05.cpp}}
+  \end{overlayarea}
 }
 
 \end{document}

@@ -5,9 +5,9 @@ bool match_pattern(Buffer const& mem)
 
 bool process_buffer(std::vector<Buffer> const& mems)
 {
-  for(auto cit = mems.cbegin(); cit != v.cend(); ++cit)
+  for (auto i = mems.cbegin(); i != mems.cend(); ++i)
   {
-    if (match_pattern(*cit)) 
+    if (match_pattern(*i))
       return true;
   }
 

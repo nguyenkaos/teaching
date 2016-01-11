@@ -5,8 +5,8 @@ bool match_pattern(Buffer const& mem)
 
 bool process_buffer(std::vector<Buffer> const& mems)
 {
-  return find_if( std::cbegin(mems), std::cend(mems)
-                , match_pattern
-                ) != std::cend(mems);
+  return std::find_if(std::cbegin(mems), std::cend(mems)
+                     , match_pattern
+                     ) != std::cend(mems);
 }
 

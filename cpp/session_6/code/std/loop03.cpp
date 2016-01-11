@@ -5,9 +5,9 @@ bool match_pattern(Buffer const& mem)
 
 bool process_buffer(std::vector<Buffer> const& mems)
 {
-  for(auto const& mem : mems)
+  for (auto const& mem : mems)
   {
-    if (match_pattern(mem)) 
+    if (match_pattern(mem))
       return true;
   }
 
