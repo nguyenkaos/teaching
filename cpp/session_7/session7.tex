@@ -1,0 +1,264 @@
+% !TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+\documentclass[svgnames]{beamer}
+\setlength{\tabcolsep}{3em}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          titleline=true,
+          alternativetitlepage=true% Use the fancy title page.
+          ]{Torino}
+\usecolortheme{metascale}
+\usepackage{listings}
+
+\ifxetex
+  \usepackage{fontspec}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setsansfont[ItalicFont={GillSansMTPro-BookItalic}]{GillSansMTPro-Book}
+  \setmonofont{Inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\else
+  \usepackage[utf8x]{inputenc}
+  %\usepackage[nott]{inconsolata}
+  %\newcommand{\codefont}{\fontfamily{fi4}\selectfont}
+  \usepackage{inconsolata}
+  \newcommand{\codefont}{\ttfamily}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{colortbl}
+\usepackage[frenchb]{babel}
+%\usepackage{pgfplots}
+%\usepackage{standalone}
+\usepackage{relsize}
+
+% setup tikz
+%% \usepackage{tikz}
+%% \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+%% decorations.pathreplacing,decorations.pathmorphing,shapes,%
+%% matrix,shapes.symbols,plotmarks,decorations.markings,shadows,%
+%% snakes,backgrounds}
+\def\print#1{\pgfmathparse{#1}\pgfmathresult}
+\def\colx{Blue!40}
+\def\coly{Blue!20}
+\def\colz{white}
+
+\def\C++{\textup{C}\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+
+% vertical align box
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\lstdefinestyle{customcpp}{language=C++,
+        basicstyle=\tiny\codefont,
+        tabsize=2,
+        numberstyle=\footnotesize,
+        showstringspaces=false,
+        %columns=fullflexible,
+        keywordstyle=\color[rgb]{0.64,0.13,0.11},
+        identifierstyle=,
+        commentstyle=\color[rgb]{0.27,0.27,0.28},
+        stringstyle=\color[rgb]{0.82,0.16,0.14},
+        morekeywords=noexcept
+        }
+
+\definecolor{hlcolor}{rgb}{0.88,0.88,0.88}
+\pgfdeclareimage[interpolate=true,width=9cm]{move}{move}
+
+
+\NoAutoSpaceBeforeFDP
+
+\title{Programmation C++ Avancée}
+\subtitle{Session 7 -- Méta-programmation}
+\author{Joel Falcou \and Guillaume Melquiond}
+\institute{Laboratoire de Recherche en Informatique}
+\date{}
+
+\subject{Computer Science}
+
+\begin{document}
+\include{sourcecode}
+\include{slidelst}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\setcounter{framenumber}{0}
+
+\frame
+{
+  \frametitle{Les \texttt{templates} en C++11/14}
+
+  \begin{block}{Nouvelles fonctionalit\'es}
+  \begin{itemize}
+  \item La fin du cauchemar des \texttt{>>}
+  \item Les \textit{Traits}
+  \item Assertion \`a la compilation
+  \item Notion d'expression constante
+  \item Maitrise de la SFINAE
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Les \texttt{Traits}}
+
+  \begin{block}{Objectifs}
+  \begin{itemize}
+  \item Introspection limit\'ee sur les propri\'et\'es des types
+  \item G\'en\'eration de nouveaux types
+  \item Outils pour la sp\'ecialisation avanc\'ee
+  \item Notion de \textbf{M\'eta-fonction} : fonction manipulant et retournant un type
+  \end{itemize}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Les \texttt{Traits}}
+
+  \begin{block}{Traits d'introspection}
+  \begin{itemize}
+  \item Classification des types selon leur s\'emantique
+  \item V\'erification d'existence d'une interface donn\'ee
+  \item R\'ecup\'eration d'informations structurelles
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Exemple}
+  \sourcecodecpp{code/generic/introspection.cpp}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Les \texttt{Traits}}
+
+  \begin{block}{Générateur de type}
+  \begin{itemize}
+  \item Manipulation s\^ure des qualificateurs
+  \item Cr\'eation de types v\'erifiant certaines propri\'et\'es
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Exemple}
+  \sourcecodecpp{code/generic/generation.cpp}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Les \texttt{Traits} - Application}
+  \sourcecodecpp{code/generic/traits_copy.cpp}
+}
+
+\frame
+{
+  \frametitle{Les \texttt{static\_assert}}
+
+  \begin{block}{Objectifs}
+  \begin{itemize}
+  \item \texttt{assert} : v\'erifie l'\'etat logique d'un programme au runtime
+  \item Comment v\'erifier l'\'etat logique \`a la compilation ?
+  \item \'Emission de messages d'erreur customis\'es
+  \item Interaction avec les \textit{Traits}
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Exemple}
+  \sourcecodecpp{code/generic/staticassert.cpp}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Les Expressions Constantes}
+
+  \begin{block}{Objectifs}
+  \begin{itemize}
+  \item Simplifier le développement de méta-fonctions numériques
+  \item Syntaxe homogéne aux fonctions classiques
+  \item Utilisable dans les contextes requérant une constante
+  \end{itemize}
+  \end{block}
+
+  \begin{block}{Syntaxe et Exemples}
+  \only<1>{\sourcecodecpp{code/generic/factorialbefore.cpp}}
+  \only<2>{\sourcecodecpp{code/generic/factorial.cpp}}
+  \only<3>{\sourcecodecpp{code/generic/constfactorial.cpp}}
+  \only<4>{\sourcecodecpp{code/generic/consterror.cpp}}
+  \end{block}
+}
+
+\frame
+{
+  \frametitle{Maitrise de la SFINAE}
+  \begin{block}{Qu'est-ce que la SFINAE ?}
+  \begin{itemize}
+  \footnotesize
+  \item Lors de la r\'esolution de la surcharge de fonctions, il se peut qu'une 
+  surcharge instancie une fonction \texttt{template}
+  \item Cette instanciation peut \'echouer
+  \item Au lieu d'émettre une erreur, la surcharge est ignor\'ee
+  \item SFINAE = Substitution Failure Is Not An Error
+  \end{itemize}
+  \end{block}
+
+  \only<1>{\sourcecodecpp{code/generic/sfinae.cpp}}
+
+  \only<2>
+  {
+    \begin{block}{Int\'er\^ets}
+    \begin{itemize}
+    \footnotesize
+    \item Controler ces erreurs permet d'\'eliminer des fonctions sur des critères
+    arbitraires
+    \item Customisation de la surcharge de fonctions ou de classes \texttt{templates}
+    \item Interaction avec les \textit{Traits}
+    \item \texttt{std::enable\_if}
+    \end{itemize}
+    \end{block}
+  }
+}
+
+\frame
+{
+  \frametitle{Maitrise de la SFINAE}
+  \begin{block}{Mise en \oe{uvre}}
+  \sourcecodecpp{code/generic/enable_if.cpp}
+  \end{block}
+}
+
+\section{Tag Dispatching}
+\begin{frame}
+\frametitle{Tag Dispatching}
+\begin{block}{Limitation de la SFINAE}
+\begin{itemize}
+\item Les conditions d'exclusion doivent être disjointes
+\item Difficile à étendre hors des fonctions
+\item La compilation est en $O(N)$ avec le nombre de cas
+\end{itemize}
+\end{block}
+
+\begin{block}{Le Tag Dispatching}
+\begin{itemize}
+\item Catégorisation des types selon des familles de propriétés
+\item Facile à étendre: une famille = un type
+\item La sélection se fait via la surcharge normale
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Tag Dispatching - \texttt{std::advance}}
+\only<1>{\lsttagdispatchingtag}
+\only<2>{\lsttagdispatchingfunctioninput}
+\only<3>{\lsttagdispatchingfunctionbi}
+\only<4>{\lsttagdispatchingfunctionrandom}
+\only<5>{\lsttagdispatchingfunctionmain}
+\end{frame}
+
+\end{document}
