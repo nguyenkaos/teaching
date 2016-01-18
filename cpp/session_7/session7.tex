@@ -91,13 +91,13 @@
 {
   \frametitle{Les \texttt{templates} en C++11/14}
 
-  \begin{block}{Nouvelles fonctionalit\'es}
+  \begin{block}{Nouvelles fonctionnalités}
   \begin{itemize}
   \item La fin du cauchemar des \texttt{>>}
   \item Les \textit{Traits}
   \item Assertion \`a la compilation
   \item Notion d'expression constante
-  \item Maitrise de la SFINAE
+  \item Maîtrise de la SFINAE
   \end{itemize}
   \end{block}
 }
@@ -108,10 +108,10 @@
 
   \begin{block}{Objectifs}
   \begin{itemize}
-  \item Introspection limit\'ee sur les propri\'et\'es des types
-  \item G\'en\'eration de nouveaux types
-  \item Outils pour la sp\'ecialisation avanc\'ee
-  \item Notion de \textbf{M\'eta-fonction} : fonction manipulant et retournant un type
+  \item Introspection limitée sur les propriétés des types
+  \item Génération de nouveaux types
+  \item Outils pour la spécialisation avancée
+  \item Notion de \textbf{méta-fonction} : fonction manipulant et retournant un type
   \end{itemize}
   \end{block}
 }
@@ -122,14 +122,15 @@
 
   \begin{block}{Traits d'introspection}
   \begin{itemize}
-  \item Classification des types selon leur s\'emantique
-  \item V\'erification d'existence d'une interface donn\'ee
-  \item R\'ecup\'eration d'informations structurelles
+  \item Classification des types selon leur sémantique
+  \item Vérification d'existence d'une interface donnée
+  \item Récupération d'informations structurelles
   \end{itemize}
   \end{block}
 
   \begin{block}{Exemple}
-  \sourcecodecpp{code/generic/introspection.cpp}
+  \medskip
+  \sourcecodecpplines{code/generic/introspection.cpp}{4}{15}
   \end{block}
 }
 
@@ -139,12 +140,13 @@
 
   \begin{block}{Générateur de type}
   \begin{itemize}
-  \item Manipulation s\^ure des qualificateurs
-  \item Cr\'eation de types v\'erifiant certaines propri\'et\'es
+  \item Manipulation sûre des qualificateurs
+  \item Création de types vérifiant certaines propriétés
   \end{itemize}
   \end{block}
 
   \begin{block}{Exemple}
+  \medskip
   \sourcecodecpp{code/generic/generation.cpp}
   \end{block}
 }
@@ -161,14 +163,15 @@
 
   \begin{block}{Objectifs}
   \begin{itemize}
-  \item \texttt{assert} : v\'erifie l'\'etat logique d'un programme au runtime
-  \item Comment v\'erifier l'\'etat logique \`a la compilation ?
-  \item \'Emission de messages d'erreur customis\'es
+  \item \texttt{assert} : vérifie l'état logique d'un programme à l'exécution
+  \item Comment vérifier l'état logique à la compilation ?
+  \item Émission de messages d'erreur customisés
   \item Interaction avec les \textit{Traits}
   \end{itemize}
   \end{block}
 
   \begin{block}{Exemple}
+  \medskip
   \sourcecodecpp{code/generic/staticassert.cpp}
   \end{block}
 }
@@ -180,22 +183,24 @@
   \begin{block}{Objectifs}
   \begin{itemize}
   \item Simplifier le développement de méta-fonctions numériques
-  \item Syntaxe homogéne aux fonctions classiques
+  \item Syntaxe homogène aux fonctions classiques
   \item Utilisable dans les contextes requérant une constante
   \end{itemize}
   \end{block}
 
   \begin{block}{Syntaxe et Exemples}
+  \begin{overlayarea}{\textwidth}{5cm}
   \only<1>{\sourcecodecpp{code/generic/factorialbefore.cpp}}
   \only<2>{\sourcecodecpp{code/generic/factorial.cpp}}
   \only<3>{\sourcecodecpp{code/generic/constfactorial.cpp}}
   \only<4>{\sourcecodecpp{code/generic/consterror.cpp}}
+  \end{overlayarea}
   \end{block}
 }
 
 \frame
 {
-  \frametitle{Maitrise de la SFINAE}
+  \frametitle{Maîtrise de la SFINAE}
   \begin{block}{Qu'est-ce que la SFINAE ?}
   \begin{itemize}
   \footnotesize
@@ -207,14 +212,14 @@
   \end{itemize}
   \end{block}
 
+  \begin{overlayarea}{\textwidth}{5cm}
   \only<1>{\sourcecodecpp{code/generic/sfinae.cpp}}
-
   \only<2>
   {
-    \begin{block}{Int\'er\^ets}
+    \begin{block}{Intérêts}
     \begin{itemize}
     \footnotesize
-    \item Controler ces erreurs permet d'\'eliminer des fonctions sur des critères
+    \item Contrôler ces erreurs permet d'éliminer des fonctions sur des critères
     arbitraires
     \item Customisation de la surcharge de fonctions ou de classes \texttt{templates}
     \item Interaction avec les \textit{Traits}
@@ -222,14 +227,13 @@
     \end{itemize}
     \end{block}
   }
+  \end{overlayarea}
 }
 
 \frame
 {
-  \frametitle{Maitrise de la SFINAE}
-  \begin{block}{Mise en \oe{uvre}}
+  \frametitle{Maîtrise de la SFINAE}
   \sourcecodecpp{code/generic/enable_if.cpp}
-  \end{block}
 }
 
 \section{Tag Dispatching}
@@ -246,19 +250,21 @@
 \begin{block}{Le Tag Dispatching}
 \begin{itemize}
 \item Catégorisation des types selon des familles de propriétés
-\item Facile à étendre: une famille = un type
+\item Facile à étendre : une famille = un type
 \item La sélection se fait via la surcharge normale
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Tag Dispatching - \texttt{std::advance}}
+\frametitle{Tag Dispatching -- \texttt{std::advance}}
+\begin{overlayarea}{\textwidth}{10cm}
 \only<1>{\lsttagdispatchingtag}
 \only<2>{\lsttagdispatchingfunctioninput}
 \only<3>{\lsttagdispatchingfunctionbi}
 \only<4>{\lsttagdispatchingfunctionrandom}
 \only<5>{\lsttagdispatchingfunctionmain}
+\end{overlayarea}
 \end{frame}
 
 \end{document}

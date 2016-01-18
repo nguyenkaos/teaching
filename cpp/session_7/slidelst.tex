@@ -1,45 +1,44 @@
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttagdispatchingtag{%
-\begin{lstlisting}
+\defverbatim[colored]\lsttagdispatchingtag{%
+\begin{lstlisting}[style=customcpp]
 namespace std 
 {
   struct input_iterator_tag {};
   struct bidirectional_iterator_tag : input_iterator_tag {};
-  struct random_access_iterator_tag 
+  struct random_access_iterator_tag
        : bidirectional_iterator_tag {};
 }
 \end{lstlisting}}
 
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttagdispatchingfunctioninput{%
-\begin{lstlisting}
-namespace std 
+\defverbatim[colored]\lsttagdispatchingfunctioninput{%
+\begin{lstlisting}[style=customcpp]
+namespace std
 {
-  namespace detail 
+  namespace detail
   {
     template <class InputIterator, class Distance>
     void advance_dispatch( InputIterator& i
                          , Distance n
                          , input_iterator_tag const&
-                         ) 
+                         )
     {
-      assert(n >=0);
+      assert(n >= 0);
       while (n--) ++i;
     }
   }
 }
 \end{lstlisting}}
 
-
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttagdispatchingfunctionbi{%
-\begin{lstlisting}
-namespace std 
+\defverbatim[colored]\lsttagdispatchingfunctionbi{%
+\begin{lstlisting}[style=customcpp]
+namespace std
 {
-  namespace detail 
+  namespace detail
   {
     template <class BidirectionalIterator, class Distance>
     void advance_dispatch( BidirectionalIterator& i
                          , Distance n
                          , bidirectional_iterator_tag const&
-                         ) 
+                         )
     {
       if (n >= 0)
         while (n--) ++i;
@@ -50,17 +49,17 @@ namespace std
 }
 \end{lstlisting}}
 
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttagdispatchingfunctionrandom{%
-\begin{lstlisting}
-namespace std 
+\defverbatim[colored]\lsttagdispatchingfunctionrandom{%
+\begin{lstlisting}[style=customcpp]
+namespace std
 {
-  namespace detail 
+  namespace detail
   {
     template <class RandomAccessIterator, class Distance>
     void advance_dispatch( RandomAccessIterator& i
                          , Distance n
                          , random_access_iterator_tag const&
-                         ) 
+                         )
     {
       i += n;
     }
@@ -69,12 +68,12 @@ namespace std
 \end{lstlisting}}
 
 
-\lstset{basicstyle=\scriptsize\ttfamily,frame=none,aboveskip=0bp,breaklines=true,belowskip=0bp,language=C++,showspaces=false, showstringspaces=false}\defverbatim[colored]\lsttagdispatchingfunctionmain{%
-\begin{lstlisting}
-namespace std 
+\defverbatim[colored]\lsttagdispatchingfunctionmain{%
+\begin{lstlisting}[style=customcpp]
+namespace std
 {
   template <class InputIterator, class Distance>
-  void advance(InputIterator& i, Distance n) 
+  void advance(InputIterator& i, Distance n)
   {
     typename iterator_traits<InputIterator>::iterator_category category;
     detail::advance_dispatch(i, n, category);
